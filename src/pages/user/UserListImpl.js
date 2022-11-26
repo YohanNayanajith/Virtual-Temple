@@ -8,14 +8,14 @@ import PropTypes from "prop-types";
 import { Box, Button, Chip, Grid } from "@mui/material";
 
 const CustomToolbar = ({ setFilterButtonEl }) => (
-    <GridToolbarContainer>
-      <GridToolbarFilterButton ref={setFilterButtonEl} />
-    </GridToolbarContainer>
-  );
-  
-  CustomToolbar.propTypes = {
-    setFilterButtonEl: PropTypes.func.isRequired,
-  };
+  <GridToolbarContainer>
+    <GridToolbarFilterButton ref={setFilterButtonEl} />
+  </GridToolbarContainer>
+);
+
+CustomToolbar.propTypes = {
+  setFilterButtonEl: PropTypes.func.isRequired,
+};
 
 export const UserListImpl = () => {
   //     const user = useSelector((state) => state.user.currentUser);
@@ -54,29 +54,29 @@ export const UserListImpl = () => {
   //     getOrderData();
   //   }, []);
   const [filterButtonEl, setFilterButtonEl] = React.useState(null);
-    const rows = [
-        {
-            id: 1,
-          col1: "Mango",
-          col2: "Category 1",
-          col3: 152,
-          col4: 1000,
-        },
-        {
-            id: 2,
-          col1: "Mango",
-          col2: "Category 1",
-          col3: 152,
-          col4: 1000,
-        },
-        {
-            id: 3,
-          col1: "Mango",
-          col2: "Category 1",
-          col3: 152,
-          col4: 1000,
-        }
-    ];
+  const rows = [
+    {
+      id: 1,
+      col1: "Mango",
+      col2: "Category 1",
+      col3: 152,
+      col4: 1000,
+    },
+    {
+      id: 2,
+      col1: "Mango",
+      col2: "Category 1",
+      col3: 152,
+      col4: 1000,
+    },
+    {
+      id: 3,
+      col1: "Mango",
+      col2: "Category 1",
+      col3: 152,
+      col4: 1000,
+    },
+  ];
 
   const columns = [
     { field: "col1", headerName: "Product", width: 180 },
@@ -107,10 +107,10 @@ export const UserListImpl = () => {
       }}
     >
       <DataGrid
-        disableSelectionOnClick
-        components={{
-          Toolbar: CustomToolbar,
-        }}
+        // disableSelectionOnClick
+        // components={{
+        //   Toolbar: CustomToolbar,
+        // }}
         componentsProps={{
           panel: {
             anchorEl: filterButtonEl,
