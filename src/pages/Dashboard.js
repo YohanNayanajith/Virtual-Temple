@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from "@mui/material";
-
+import "./common.css";
 import MainHeader from '../components/MainHeader'
 
 export const Dashboard = () => {

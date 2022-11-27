@@ -8,6 +8,7 @@ import { AdvertisementList } from "./pages/advertisement/AdvertisementList";
 import { EventList } from "./pages/event/EventList";
 import { PostList } from "./pages/post/PostList";
 import { UserList } from "./pages/user/UserList";
+import { UserCreate } from "./pages/user/UserCreate";
 
 function App() {
   const theme = createTheme({
@@ -17,6 +18,12 @@ function App() {
       },
       secondary: {
         main: "#52b202"
+      },
+      danger: {
+        main: "#c62828"
+      },
+      blue: {
+        main: "#1e88e5"
       }
     },
     typography: {
@@ -25,6 +32,14 @@ function App() {
       fontWeightRegular: 500,
       fontWeightMedium: 600,
       fontWeightBold: 700,
+      h3 : {
+        fontSize: '1.3rem',
+        fontWeight: "bold",
+        '@media (min-width:600px)': {
+          fontSize: '1.7rem',
+          fontWeight: "bold",
+        },
+      }
     },
   });
   return (
@@ -35,6 +50,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           {/* user */}
           <Route path="/user" element={<UserList />} />
+          <Route path="/createUser" element={<UserCreate />} />
           {/* Advertisement */}
           <Route path="/advertisement" element={<AdvertisementList />} />
           {/* event */}
