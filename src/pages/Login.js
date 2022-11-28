@@ -12,9 +12,10 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-// import Swal from "sweetalert2";
+import { login } from "../redux/userApiCalls";
+import Swal from "sweetalert2";
 
 function Copyright(props) {
   return (
@@ -41,16 +42,29 @@ export default function Login() {
   // const user = useSelector((state) => state.user.currentUser);
   // let userError = useSelector((state) => state.user.error);
   // let userType = useSelector((state) => state.user.userType);
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
-    navigate("/dashboard");
+    const loginData = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+    const result = await login(dispatch, loginData);
+    if (result) {
+      navigate("/dashboard");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Login Fail!",
+      });
+    }
   };
 
   return (
@@ -99,6 +113,7 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
+                type="email"
                 id="email"
                 label="Email Address"
                 name="email"

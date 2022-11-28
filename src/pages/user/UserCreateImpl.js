@@ -4,6 +4,13 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import app from "../../firebase";
 
 export const UserCreateImpl = () => {
   const [type, settype] = useState(true);
@@ -47,6 +54,145 @@ export const UserCreateImpl = () => {
     console.log(inputs);
     // alert("Click submit");
   };
+
+  // const handleClick = async (e) => {
+  //   e.preventDefault();
+  //   const data = new FormData(e.currentTarget);
+  //   let formData = {
+  //     title: data.get("title"),
+  //     description: data.get("description"),
+  //     category: data.get("category"),
+  //     uom: data.get("messure"),
+  //     minQuantity: data.get("minQuantity"),
+  //     maxQuantity: data.get("maxQuantity"),
+  //     file: data.get("file"),
+  //   };
+  //   if (!formData.title) {
+  //     setTitleError(true);
+  //     setTitleMessageError("Title can't be empty!");
+  //   } else if (!formData.description) {
+  //     setDescriptionError(true);
+  //     setDescriptionMessageError("Description can't be empty!");
+  //   } else if (!formData.category) {
+  //     setCategoryError(true);
+  //     setCategoryMessageError("Category can't be empty!");
+  //   } else if (!formData.uom) {
+  //     setMessureError(true);
+  //     setMessureMessageError("UOM can't be empty!");
+  //   } else if (!formData.minQuantity) {
+  //     setMinimumLevelError(true);
+  //     setMinimumLevelMessageError("Minimum level can't be empty!");
+  //   } else if (!formData.maxQuantity) {
+  //     setQuantityError(true);
+  //     setQuantityMessageError("Maximum level can't be empty!");
+  //   } else if (!file) {
+  //     setImageError(true);
+  //     setImageMessageError("Image can't be empty!");
+  //   } else if(parseInt(formData.minQuantity) >= parseInt(formData.maxQuantity)){
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Error',
+  //       text: 'Maximum level should be greater than minimum level!'
+  //     })
+  //   }else {
+  //     const fileName = new Date().getTime() + file.name;
+  //     const storage = getStorage(app);
+  //     const storageRef = ref(storage, fileName);
+  //     const uploadTask = uploadBytesResumable(storageRef, file);
+
+  //     // Register three observers:
+  //     // 1. 'state_changed' observer, called any time the state changes
+  //     // 2. Error observer, called on failure
+  //     // 3. Completion observer, called on successful completion
+  //     uploadTask.on(
+  //       "state_changed",
+  //       (snapshot) => {
+  //         // Observe state change events such as progress, pause, and resume
+  //         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+  //         setAfterClicked(true);
+  //         const prevProgress =
+  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+  //         console.log("Upload is " + prevProgress + "% done");
+  //         switch (snapshot.state) {
+  //           case "paused":
+  //             console.log("Upload is paused");
+  //             break;
+  //           case "running":
+  //             console.log("Upload is running");
+  //             break;
+  //           default:
+  //         }
+  //       },
+  //       (error) => {
+  //         // Handle unsuccessful uploads
+  //         Swal.fire({
+  //           icon: 'error',
+  //           title: 'Oops...',
+  //           text: 'Image added unsuccess!'
+  //         })
+  //       },
+  //       () => {
+  //         // Handle successful uploads on complete
+  //         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+  //         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //           const product = {
+  //             ...inputs,
+  //             img: downloadURL,
+  //             // categories: [...cat, "all"],
+  //             category: category,
+  //             uom: UOM,
+  //             isApprove: userType === "ROLE_PURCHASING_STAFF" ? false : true,
+  //           };
+  //           const productStatus = addProduct(product, dispatch);
+  //           console.log(productStatus.PromiseResult);
+  //           if (productStatus) {
+  //             setAfterClicked(false);
+  //             setProgress(0);
+  //             setAllShow(true);
+  //             Swal.fire({
+  //               title: "Success!",
+  //               text: "Product added success!",
+  //               icon: "success",
+  //               confirmButtonText: 'Ok',
+  //               confirmButtonColor: '#378cbb',
+  //               // showConfirmButton: false,
+  //               // timer: 2000,
+  //             }).then((result) => {
+  //               setInputs({});
+  //               setCategory("");
+  //               setFile(null);
+  //               setUOM("");
+  //               // if (result.isConfirmed) {
+  //               //   Swal.fire('Saved!', '', 'success')
+  //               // }
+  //               // window.location.href = "http://localhost:3000/purchaseStaff/productList";
+  //             })
+  //             // return (
+  //             //   <Stack sx={{ width: "100%" }} spacing={2}>
+  //             //     <Alert severity="success">
+  //             //       Product added success!
+  //             //     </Alert>
+  //             //   </Stack>
+  //             // );
+  //           } else {
+  //             return (
+  //               Swal.fire({
+  //                 icon: 'error',
+  //                 title: 'Oops...',
+  //                 text: 'Product added unsuccess!'
+  //               })
+  //               // <Stack sx={{ width: "100%" }} spacing={2}>
+  //               //   <Alert severity="warning">Product added unsuccess!</Alert>
+  //               // </Stack>
+  //             );
+  //           }
+  //         });
+  //       }
+  //     );
+  //   }
+  // };
+
   return (
     <Grid container xs={12} direction="column">
       <Grid container xs={12} direction="row" justifyContent="space-between">
