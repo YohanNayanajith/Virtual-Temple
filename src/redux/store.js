@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import userReducer from "./userSlice";
+import userReducer from "./userRedux";
+import eventReducer from "./eventRedux";
 import {
   persistStore,
   persistReducer,
@@ -20,6 +21,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
+  event: eventReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -35,9 +37,10 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      // serializableCheck: {
+      //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      // },
+      serializableCheck: false,
     }),
 });
 

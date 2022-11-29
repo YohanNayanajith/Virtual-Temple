@@ -3,10 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    currentUser: null,
-    otherUsers: null,
+    currentUser: [],
+    otherUsers: [],
+    adminUsers: [],
     isFetching: false,
-    userType:null,
+    authorities:[],
     token: null,
     error: false,
   },
@@ -16,21 +17,23 @@ const userSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.isFetching = false;
-      state.currentUser = action.payload;
-      state.token = action.payload.accessToken;
-      state.userType = action.payload.userrole;
+      state.currentUser = action.payload.data;
+      state.token = action.payload.token;
+      //please set permissions
+      // state.authorities = action.payload.authorities;
     },
     loginFailure: (state) => {
       state.isFetching = false;
       state.error = true;
     },
     logout: (state) => {
-      state.currentUser = null;
+      state.currentUser = [];
       state.isFetching = false;
       state.error = false;
-      state.otherUsers = null;
+      state.otherUsers = [];
       state.token = null;
-      state.userType = null;
+      state.authorities = [];
+      state.adminUsers = [];
     },
 
     //GET ALL
@@ -41,6 +44,10 @@ const userSlice = createSlice({
     getUserSuccess: (state, action) => {
       state.isFetching = false;
       state.otherUsers = action.payload;
+    },
+    getAdminUserSuccess: (state, action) => {
+      state.isFetching = false;
+      state.adminUsers = action.payload;
     },
     getUserFailure: (state) => {
       state.isFetching = false;
@@ -100,6 +107,7 @@ export const {
   logout,
   getUserStart,
   getUserSuccess,
+  getAdminUserSuccess,
   getUserFailure,
   deleteUserStart,
   deleteUserSuccess,

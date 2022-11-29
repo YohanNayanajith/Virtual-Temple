@@ -26,8 +26,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://funforprogramming.com/">
+        Yohan
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -48,24 +48,25 @@ export default function Login() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
+      contactNumber: data.get("contactNumber"),
       password: data.get("password"),
     });
     const loginData = {
-      email: data.get("email"),
+      contact: data.get("contactNumber"),
       password: data.get("password"),
     };
-    navigate("/dashboard");
-    // const result = await login(dispatch, loginData);
-    // if (result) {
-    //   navigate("/dashboard");
-    // } else {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: "Login Fail!",
-    //   });
-    // }
+    console.log(loginData);
+    // navigate("/dashboard");
+    const result = await login(dispatch, loginData);
+    if (result) {
+      navigate("/dashboard");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Login Fail!",
+      });
+    }
   };
 
   return (
@@ -78,7 +79,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: "url(https://res.cloudinary.com/midefulness/image/upload/v1669736690/Home/4247827_vrfddn.jpg)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -114,11 +115,11 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
-                type="email"
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                type="text"
+                id="contactNumber"
+                label="Contact Number"
+                name="contactNumber"
+                autoComplete="contactNumber"
                 autoFocus
               />
               <TextField
@@ -143,7 +144,7 @@ export default function Login() {
               >
                 Sign In
               </Button>
-              <Grid container>
+              {/* <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
@@ -154,7 +155,7 @@ export default function Login() {
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
-              </Grid>
+              </Grid> */}
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

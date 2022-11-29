@@ -14,12 +14,10 @@ import {
   ThemeProvider,
 } from "@mui/material";
 
-import MainTab from "./MainTab";
-import SettingsIcon from "@mui/icons-material/Settings";
 import SlideBar from "./SlideBar";
 import MainHeaderMenu from "./MainHeaderMenu";
 import NotificationMenu from "./NotificationMenu";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 const theme = createTheme({
@@ -41,21 +39,20 @@ export default function MainHeader(props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  //   const user = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
 
-  //   const dispatch = useDispatch();
-  //   let userType = useSelector((state) => state.user.userType);
+  const dispatch = useDispatch();
 
-  //   useEffect(() => {
-  //     // alert("hiii");
-  //     const checkUserExist = () => {
-  //       if (userType == null) {
-  //         navigate("/login");
-  //       }
-  //     };
-  //     checkUserExist();
-  //   }, []);
+  useEffect(() => {
+    const checkUserExist = () => {
+      if (!user) {
+        navigate("/");
+      }
+    };
+    checkUserExist();
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
@@ -73,13 +70,7 @@ export default function MainHeader(props) {
               variant="h6"
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-            >
-              {/* <img
-                                alt="athpotha"
-                                src="/images/athpotha_v2.png"
-                                style={{ width: 60, height: 60 }}
-                            /> */}
-            </Typography>
+            ></Typography>
             {/* <Box
               id="nav-container-list"
               sx={{ display: { xs: "none", sm: "block" } }}
@@ -87,7 +78,7 @@ export default function MainHeader(props) {
               <MainTab value={tabValue} />
             </Box> */}
             <IconButton onClick={() => navigate("/profile")}>
-              <Avatar></Avatar>
+              <Avatar alt="Profile Picture" src={user.user_img} />
             </IconButton>
             <NotificationMenu />
             <MainHeaderMenu />

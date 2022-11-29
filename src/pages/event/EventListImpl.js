@@ -14,10 +14,11 @@ import { useNavigate } from "react-router";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
+import { getEvent } from "../../redux/eventApiCalls";
 
-export const UserListImpl = () => {
+export const EventListImpl = () => {
   const token = useSelector((state) => state.user.token);
-  const otherUsers = useSelector((state) => state.user.otherUsers.data);
+  const events = useSelector((state) => state.event.events.data);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -26,7 +27,7 @@ export const UserListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
-      const result = await getUsers(dispatch, token);
+      const result = await getEvent(dispatch, token);
       if (result) {
         console.log("Get user data success");
       } else {
@@ -39,21 +40,21 @@ export const UserListImpl = () => {
   React.useEffect(() => {
     const getNormalUserData = async () => {
       let rowData = [];
-      otherUsers.map(
+      events.map(
         (item) => {
           // if (item.status) {
           rowData.push({
-            id: item.user_id,
-            col1: item.first_name,
-            col2: item.last_name,
-            col3: item.district,
-            col4: item.user_img,
-            col5: item.town,
-            col6: item.address,
-            col7: item.contact,
-            col8: item.email,
+            id: item.event_id,
+            col1: item.event_name,
+            col2: item.event_create_date,
+            col3: item.description,
+            col4: item.price,
+            col5: item.user_id,
+            col6: item.event_location,
+            col7: item.event_date,
+            col8: item.event_time,
             col9: item.status,
-            col10: item.birthday,
+            col10: item.event_image,
           });
         }
         // }
@@ -136,48 +137,24 @@ export const UserListImpl = () => {
   const columns = [
     {
       field: "col1",
-      headerName: "Full Name",
+      headerName: "Event Name",
       width: 220,
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img className="productListImg" src={params.row.col4} alt="" />
-            {params.row.col1 +" "+ params.row.col2}
+            <img className="productListImg" src={params.row.col10} alt="" />
+            {params.row.col1}
           </div>
         );
       },
     },
-    { field: "col8", headerName: "Email", width: 180 },
-    { field: "col6", headerName: "Address", width: 180 },
-    { field: "col7", headerName: "Contact", width: 180 },
-    { field: "col5", headerName: "Town", width: 180 },
-    { field: "col3", headerName: "District", width: 180 },
-    {
-      field: "col10",
-      headerName: "Birthday",
-      width: 180,
-      renderCell: (params) => {
-        return (
-          <>
-            {/* params.row.isCancel */}
-            <Stack direction="row" alignItems="center" spacing={1}>
-            {params.row.col10}
-              <IconButton
-                aria-label="edit"
-                size="large"
-                color="success"
-                onClick={() => wishBirthday(params.row)}
-              >
-                 <CelebrationIcon />
-              </IconButton>
-            </Stack>
-          </>
-        );
-      },
-    },
+    { field: "col3", headerName: "Description", width: 180 },
+    { field: "col6", headerName: "Location", width: 180 },
+    { field: "col7", headerName: "Date", width: 180 },
+    { field: "col8", headerName: "Time", width: 180 },
     {
       field: "col9",
-      headerName: "User Status",
+      headerName: "Event Status",
       width: 150,
       renderCell: (params) => {
         return (
@@ -249,7 +226,7 @@ export const UserListImpl = () => {
         alignItems="center"
       >
         <div>
-          <h2>Normal Users</h2>
+          <h2>Events</h2>
         </div>
         <div>
           <Button

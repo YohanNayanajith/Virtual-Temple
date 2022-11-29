@@ -8,16 +8,15 @@ import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../../redux/userApiCalls";
 import { TableComponent } from "../../components/TableComponent";
 import { useNavigate } from "react-router";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
-import CelebrationIcon from "@mui/icons-material/Celebration";
+import { getAdminUsers } from "../../redux/userApiCalls";
 
-export const UserListImpl = () => {
+export const UserAdminListImpl = () => {
   const token = useSelector((state) => state.user.token);
-  const otherUsers = useSelector((state) => state.user.otherUsers.data);
+  const adminUsers = useSelector((state) => state.user.adminUsers.data);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -26,7 +25,7 @@ export const UserListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
-      const result = await getUsers(dispatch, token);
+      const result = await getAdminUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
       } else {
@@ -39,7 +38,7 @@ export const UserListImpl = () => {
   React.useEffect(() => {
     const getNormalUserData = async () => {
       let rowData = [];
-      otherUsers.map(
+      adminUsers.map(
         (item) => {
           // if (item.status) {
           rowData.push({
@@ -53,7 +52,6 @@ export const UserListImpl = () => {
             col7: item.contact,
             col8: item.email,
             col9: item.status,
-            col10: item.birthday,
           });
         }
         // }
@@ -62,30 +60,6 @@ export const UserListImpl = () => {
     };
     getNormalUserData();
   }, []);
-
-  // const rows = [
-  //   {
-  //     id: 1,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 2,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 3,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  // ];
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -107,11 +81,6 @@ export const UserListImpl = () => {
   const updateItem = (id) => {
     console.log(id);
     navigate(`/updateUser/${id}`);
-  };
-  
-  const wishBirthday = (data) => {
-    console.log(data);
-    window.location.href = `https://api.whatsapp.com/send/?phone=${data.col7}`;
   };
 
   const changeItem = (id) => {
@@ -153,32 +122,9 @@ export const UserListImpl = () => {
     { field: "col5", headerName: "Town", width: 180 },
     { field: "col3", headerName: "District", width: 180 },
     {
-      field: "col10",
-      headerName: "Birthday",
-      width: 180,
-      renderCell: (params) => {
-        return (
-          <>
-            {/* params.row.isCancel */}
-            <Stack direction="row" alignItems="center" spacing={1}>
-            {params.row.col10}
-              <IconButton
-                aria-label="edit"
-                size="large"
-                color="success"
-                onClick={() => wishBirthday(params.row)}
-              >
-                 <CelebrationIcon />
-              </IconButton>
-            </Stack>
-          </>
-        );
-      },
-    },
-    {
       field: "col9",
       headerName: "User Status",
-      width: 150,
+      width: 180,
       renderCell: (params) => {
         return (
           <>
@@ -249,7 +195,7 @@ export const UserListImpl = () => {
         alignItems="center"
       >
         <div>
-          <h2>Normal Users</h2>
+          <h2>Admin Users</h2>
         </div>
         <div>
           <Button

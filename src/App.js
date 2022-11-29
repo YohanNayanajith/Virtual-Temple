@@ -9,6 +9,9 @@ import { EventList } from "./pages/event/EventList";
 import { PostList } from "./pages/post/PostList";
 import { UserList } from "./pages/user/UserList";
 import { UserCreate } from "./pages/user/UserCreate";
+import { UserUpdate } from "./pages/user/UserUpdate";
+import { Profile } from "./pages/user/Profile";
+import { UserAdminList } from "./pages/user/UserAdminList";
 
 function App() {
   const theme = createTheme({
@@ -51,6 +54,9 @@ function App() {
           {/* user */}
           <Route path="/user" element={<UserList />} />
           <Route path="/createUser" element={<UserCreate />} />
+          <Route path="/updateUser/:id" element={<UserUpdate />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/userAdmin" element={<UserAdminList />} />
           {/* Advertisement */}
           <Route path="/advertisement" element={<AdvertisementList />} />
           {/* event */}

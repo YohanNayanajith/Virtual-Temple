@@ -7,14 +7,14 @@ import { IconButton, ListItemIcon, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Swal from "sweetalert2";
-// import { logOutUser } from '../../store/userApiCalls';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { logOutUser } from '../redux/userApiCalls';
 
 export default function MainHeaderMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleClick = (event) => {
@@ -31,8 +31,8 @@ export default function MainHeaderMenu() {
             confirmButtonText: 'Yes, Log out!'
           }).then((result) => {
             if (result.isConfirmed) {
-                // logOutUser(dispatch);
-                navigate('/login');
+                logOutUser(dispatch);
+                navigate('/');
             }
           })
     };
@@ -55,7 +55,7 @@ export default function MainHeaderMenu() {
                 }}
                 anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
+                // onClose={handleClose}
                 TransitionComponent={Fade}
             >
                 <MenuItem onClick={handleClose}>
