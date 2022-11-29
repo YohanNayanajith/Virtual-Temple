@@ -55,16 +55,17 @@ export default function Login() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    const result = await login(dispatch, loginData);
-    if (result) {
-      navigate("/dashboard");
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Login Fail!",
-      });
-    }
+    navigate("/dashboard");
+    // const result = await login(dispatch, loginData);
+    // if (result) {
+    //   navigate("/dashboard");
+    // } else {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "Login Fail!",
+    //   });
+    // }
   };
 
   return (
