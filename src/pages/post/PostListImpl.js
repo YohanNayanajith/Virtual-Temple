@@ -14,10 +14,11 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import { getEvent } from "../../redux/eventApiCalls";
+import { getPost } from "../../redux/postApiCalls";
 
-export const EventListImpl = () => {
+export const PostListImpl = () => {
   const token = useSelector((state) => state.user.token);
-  const events = useSelector((state) => state.event.events.data);
+  const posts = useSelector((state) => state.post.posts.data);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -26,11 +27,11 @@ export const EventListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
-      const result = await getEvent(dispatch, token);
+      const result = await getPost(dispatch, token);
       if (result) {
-        console.log("Get user data success");
+        console.log("Get post data success");
       } else {
-        console.log("Get user data unsuccess");
+        console.log("Get post data unsuccess");
       }
     };
     getDataFromDB();
@@ -39,21 +40,17 @@ export const EventListImpl = () => {
   React.useEffect(() => {
     const getNormalUserData = async () => {
       let rowData = [];
-      events.map(
+      posts.map(
         (item) => {
           // if (item.status) {
           rowData.push({
-            id: item.event_id,
-            col1: item.event_name,
-            col2: item.event_create_date,
+            id: item.post_id,
+            col1: item.first_name,
+            col2: item.last_name,
             col3: item.description,
-            col4: item.price,
+            col4: item.created_date,
             col5: item.user_id,
-            col6: item.event_location,
-            col7: item.event_date,
-            col8: item.event_time,
-            col9: item.status,
-            col10: item.event_image,
+            col7: item.post_url,
           });
         }
         // }
@@ -63,30 +60,7 @@ export const EventListImpl = () => {
     getNormalUserData();
   }, []);
 
-  // const rows = [
-  //   {
-  //     id: 1,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 2,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 3,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  // ];
-
+ 
   const deleteItem = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -106,12 +80,7 @@ export const EventListImpl = () => {
 
   const updateItem = (id) => {
     console.log(id);
-    navigate(`/updateUser/${id}`);
-  };
-  
-  const wishBirthday = (data) => {
-    console.log(data);
-    window.location.href = `https://api.whatsapp.com/send/?phone=${data.col7}`;
+    navigate(`/updatePost/${id}`);
   };
 
   const changeItem = (id) => {
@@ -136,54 +105,53 @@ export const EventListImpl = () => {
   const columns = [
     {
       field: "col1",
-      headerName: "Event Name",
+      headerName: "Publish Username",
       width: 220,
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img className="productListImg" src={params.row.col10} alt="" />
-            {params.row.col1}
+            {/* <img className="productListImg" src={params.row.col10} alt="" /> */}
+            {params.row.col1 + " " + params.row.col2}
           </div>
         );
       },
     },
     { field: "col3", headerName: "Description", width: 180 },
-    { field: "col6", headerName: "Location", width: 180 },
-    { field: "col7", headerName: "Date", width: 180 },
-    { field: "col8", headerName: "Time", width: 180 },
-    {
-      field: "col9",
-      headerName: "Event Status",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <>
-            {/* params.row.isCancel */}
-            <Stack direction="row" alignItems="center" spacing={1}>
-              {params.row.col9 ? (
-                <IconButton
-                  aria-label="edit"
-                  size="large"
-                  color="success"
-                  onClick={() => changeItem(params.row.id)}
-                >
-                  <CheckIcon />
-                </IconButton>
-              ) : (
-                <IconButton
-                  aria-label="delete"
-                  size="large"
-                  color="error"
-                  onClick={() => changeItem(params.row.id)}
-                >
-                  <ClearIcon />
-                </IconButton>
-              )}
-            </Stack>
-          </>
-        );
-      },
-    },
+    { field: "col4", headerName: "Create Date", width: 180 },
+    { field: "col7", headerName: "Post URL", width: 180 },
+    // {
+    //   field: "col9",
+    //   headerName: "Event Status",
+    //   width: 150,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         {/* params.row.isCancel */}
+    //         <Stack direction="row" alignItems="center" spacing={1}>
+    //           {params.row.col9 ? (
+    //             <IconButton
+    //               aria-label="edit"
+    //               size="large"
+    //               color="success"
+    //               onClick={() => changeItem(params.row.id)}
+    //             >
+    //               <CheckIcon />
+    //             </IconButton>
+    //           ) : (
+    //             <IconButton
+    //               aria-label="delete"
+    //               size="large"
+    //               color="error"
+    //               onClick={() => changeItem(params.row.id)}
+    //             >
+    //               <ClearIcon />
+    //             </IconButton>
+    //           )}
+    //         </Stack>
+    //       </>
+    //     );
+    //   },
+    // },
     {
       field: "action",
       headerName: "Action",
@@ -225,12 +193,12 @@ export const EventListImpl = () => {
         alignItems="center"
       >
         <div>
-          <h2>Events</h2>
+          <h2>Posts</h2>
         </div>
         <div>
           <Button
             variant="contained"
-            href="/createUser"
+            href="/createPost"
             // color="secondary"
             endIcon={<AddIcon />}
           >

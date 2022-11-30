@@ -51,7 +51,8 @@ export const updateEvent = async (id, event, dispatch, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(updateEventSuccess({ id, event }));
+    // dispatch(updateEventSuccess({ id, event }));
+    console.log(res);
     return 1;
   } catch (err) {
     dispatch(updateEventFailure());

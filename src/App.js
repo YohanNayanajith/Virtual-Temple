@@ -13,6 +13,7 @@ import { UserUpdate } from "./pages/user/UserUpdate";
 import { Profile } from "./pages/user/Profile";
 import { UserAdminList } from "./pages/user/UserAdminList";
 import { UserAdminUpdate } from "./pages/user/UserAdminUpdate";
+import { PostUpdate } from "./pages/post/PostUpdate";
 
 function App() {
   const theme = createTheme({
@@ -65,6 +66,8 @@ function App() {
           <Route path="/event" element={<EventList />} />
           {/* post */}
           <Route path="/post" element={<PostList />} />
+          <Route path="/createPost" element={<PostList />} />
+          <Route path="/updatePost/:id" element={<PostUpdate />} />
         </Routes>
       </ThemeProvider>
     </StyledEngineProvider>
