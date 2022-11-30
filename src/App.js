@@ -12,6 +12,7 @@ import { UserCreate } from "./pages/user/UserCreate";
 import { UserUpdate } from "./pages/user/UserUpdate";
 import { Profile } from "./pages/user/Profile";
 import { UserAdminList } from "./pages/user/UserAdminList";
+import { UserAdminUpdate } from "./pages/user/UserAdminUpdate";
 
 function App() {
   const theme = createTheme({
@@ -55,6 +56,7 @@ function App() {
           <Route path="/user" element={<UserList />} />
           <Route path="/createUser" element={<UserCreate />} />
           <Route path="/updateUser/:id" element={<UserUpdate />} />
+          <Route path="/updateAdminUser/:id" element={<UserAdminUpdate />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/userAdmin" element={<UserAdminList />} />
           {/* Advertisement */}

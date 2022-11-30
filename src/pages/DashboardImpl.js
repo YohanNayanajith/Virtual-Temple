@@ -37,12 +37,12 @@ export const DashboardImpl = () => {
 
   useEffect(() => {
     let data = [
-      { name: MONTHS[0], Cement: 15, Sand: 12 },
-      { name: MONTHS[1], Cement: 20, Sand: 25 },
-      { name: MONTHS[2], Cement: 65, Sand: 78 },
-      { name: MONTHS[3], Cement: 45, Sand: 30 },
-      { name: MONTHS[4], Cement: 100, Sand: 80 },
-      { name: MONTHS[5], Cement: 74, Sand: 90 },
+      { name: MONTHS[0], User: 15, Admin: 12 },
+      { name: MONTHS[1], User: 20, Admin: 25 },
+      { name: MONTHS[2], User: 65, Admin: 78 },
+      { name: MONTHS[3], User: 45, Admin: 30 },
+      { name: MONTHS[4], User: 100, Admin: 80 },
+      { name: MONTHS[5], User: 74, Admin: 90 },
     ];
     setUserStats(data);
     console.log(userStats);
@@ -50,7 +50,7 @@ export const DashboardImpl = () => {
     let featureData = [
       {
         index: 1,
-        title: "No of Projects",
+        title: "No of Users",
         number: 5,
         // percentage: -1.4,
         isDowngrade: false,
@@ -58,7 +58,7 @@ export const DashboardImpl = () => {
       },
       {
         index: 2,
-        title: "New Inventory Items",
+        title: "New Events Items",
         number: 15,
         // percentage: +1.4,
         isDowngrade: true,
@@ -66,7 +66,7 @@ export const DashboardImpl = () => {
       },
       {
         index: 3,
-        title: "Overdue Deliveries",
+        title: "No of Admin Users",
         number: 8,
         // percentage: -1.4,
         isDowngrade: false,
@@ -81,10 +81,10 @@ export const DashboardImpl = () => {
       <FeaturedInfo data={featuredData} />
       <Charts
         data={userStats}
-        title="Products Analytics"
+        title="Users Analytics"
         grid
-        dataKey1="Cement"
-        dataKey2="Sand"
+        dataKey1="User"
+        dataKey2="Admin"
       />
     </div>
   );

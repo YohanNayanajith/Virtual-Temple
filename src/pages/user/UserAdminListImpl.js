@@ -80,7 +80,7 @@ export const UserAdminListImpl = () => {
 
   const updateItem = (id) => {
     console.log(id);
-    navigate(`/updateUser/${id}`);
+    navigate(`/updateAdminUser/${id}`);
   };
 
   const changeItem = (id) => {

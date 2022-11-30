@@ -19,8 +19,6 @@ import {
 } from "./userRedux";
 import { publicRequest, userRequest } from "../requestMethods";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router";
-import axios from "axios";
 
 export const normalUserRegister = async (User, token) => {
   // dispatch(addUserStart());
@@ -114,7 +112,7 @@ export const deleteUser = async (id, dispatch, token) => {
     const res = await userRequest.delete(`/user/${id}`, {
       headers: {
         "Content-Type": "application/json",
-        token: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     dispatch(deleteUserSuccess(id));
@@ -125,17 +123,37 @@ export const deleteUser = async (id, dispatch, token) => {
   }
 };
 
-export const updateUser = async (id, User, dispatch, token) => {
+export const updateNormalUser = async (user_id, User, dispatch, token) => {
   dispatch(updateUserStart());
   try {
     // update
-    const res = await userRequest.put(`/user/${id}`, User, {
+    const res = await publicRequest.put(`/user/updateUser`, User, {
       headers: {
         "Content-Type": "application/json",
-        token: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(updateUserSuccess({ id, User }));
+    console.log(res);
+    // dispatch(updateUserSuccess({ user_id, User }));
+    return 1;
+  } catch (err) {
+    dispatch(updateUserFailure());
+    return 0;
+  }
+};
+
+export const updateAdminNormalUser = async (user_id, User, dispatch, token) => {
+  dispatch(updateUserStart());
+  try {
+    // update
+    const res = await publicRequest.put(`/local_user/updateUser`, User, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res);
+    // dispatch(updateUserSuccess({ user_id, User }));
     return 1;
   } catch (err) {
     dispatch(updateUserFailure());

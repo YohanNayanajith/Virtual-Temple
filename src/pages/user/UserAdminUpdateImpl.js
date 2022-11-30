@@ -11,9 +11,9 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { getUsers, updateNormalUser } from "../../redux/userApiCalls";
+import { getAdminUsers, getUsers, updateAdminNormalUser, updateNormalUser } from "../../redux/userApiCalls";
 
-export const UserUpdateImpl = () => {
+export const UserAdminUpdateImpl = () => {
   const location = useLocation();
   // const productId = location.pathname.split("/")[3];
   const userId = window.location.pathname.split("/")[2];
@@ -38,13 +38,13 @@ export const UserUpdateImpl = () => {
   const token = useSelector((state) => state.user.token);
 
   const currentUser = useSelector((state) =>
-    state.user.otherUsers.data.find((user) => user.user_id == userId)
+    state.user.adminUsers.data.find((user) => user.user_id == userId)
   );
   console.log(currentUser);
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
-      const result = await getUsers(dispatch, token);
+      const result = await getAdminUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
       } else {
@@ -107,12 +107,13 @@ export const UserUpdateImpl = () => {
       town: currentUser.town,
       user_img: currentUser.user_img,
       zipcode: currentUser.zipcode,
+      role_id: currentUser.role_id
       // img: product.img,
     };
 
     console.log(formNewData);
 
-    const result = await updateNormalUser(
+    const result = await updateAdminNormalUser(
       currentUser.user_id,
       formNewData,
       dispatch,
