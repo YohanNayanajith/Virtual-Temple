@@ -106,7 +106,7 @@ export const EventListImpl = () => {
 
   const updateItem = (id) => {
     console.log(id);
-    navigate(`/updateUser/${id}`);
+    navigate(`/updateEvent/${id}`);
   };
   
   const wishBirthday = (data) => {
@@ -230,7 +230,7 @@ export const EventListImpl = () => {
         <div>
           <Button
             variant="contained"
-            href="/createUser"
+            href="/createEvent"
             // color="secondary"
             endIcon={<AddIcon />}
           >

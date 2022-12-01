@@ -42,11 +42,11 @@ export const deleteEvent = async (id, dispatch) => {
   }
 };
 
-export const updateEvent = async (id, event, dispatch, token) => {
+export const updateEvent = async (event, dispatch, token) => {
   dispatch(updateEventStart());
   try {
     // update
-    const res = await publicRequest.put(`/Event/update/${id}`, event, {
+    const res = await publicRequest.put(`/event/update-event`, event, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -59,18 +59,19 @@ export const updateEvent = async (id, event, dispatch, token) => {
     return 0;
   }
 };
-export const addEvent = async (event, dispatch, token) => {
-  dispatch(addEventStart());
+export const addEvent = async (event, token) => {
+  // dispatch(addEventStart());
   try {
     const res = await publicRequest.post(`/event/create-event`, event, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(addEventSuccess(res.data));
+    console.log(res);
+    // dispatch(addEventSuccess(res.data));
     return 1;
   } catch (err) {
-    dispatch(addEventFailure());
+    // dispatch(addEventFailure());
     return 0;
   }
 };

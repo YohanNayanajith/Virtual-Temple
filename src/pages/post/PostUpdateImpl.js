@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { getUsers, updateNormalUser } from "../../redux/userApiCalls";
+import { getPost, updatePost } from "../../redux/postApiCalls";
 
 export const PostUpdateImpl = () => {
   const location = useLocation();
@@ -23,15 +24,9 @@ export const PostUpdateImpl = () => {
   const [trigger, setTrigger] = useState("success");
   const [formSaveData, setFormSaveData] = useState([]);
 
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
-  const [contactError, setContactError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
+  const [descriptionError, setdescriptionError] = useState(false);
 
-  const [firstNameMessageError, setFirstNameMessageError] = useState("");
-  const [lastNameMessageError, setLastNameMessageError] = useState("");
-  const [contactMessageError, setContactMessageError] = useState("");
-  const [emailMessageError, setEmailMessageError] = useState("");
+  const [descriptionMessageError, setdescriptionMessageError] = useState("");
 
   const dispatch = useDispatch();
 
@@ -44,7 +39,7 @@ export const PostUpdateImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
-      const result = await getUsers(dispatch, token);
+      const result = await getPost(dispatch, token);
       if (result) {
         console.log("Get post data success");
       } else {
@@ -89,31 +84,18 @@ export const PostUpdateImpl = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formNewData = {
-      user_id: currentUser.user_id,
-      first_name: formData.get("first_name")
+      // user_id: currentUser.user_id,
+      description: formData.get("description")
         ? formData.get("first_name")
-        : currentUser.first_name,
-      last_name: formData.get("last_name")
-        ? formData.get("last_name")
-        : currentUser.last_name,
-      contact: formData.get("contact")
-        ? formData.get("contact")
-        : currentUser.contact,
-      email: formData.get("email") ? formData.get("email") : currentUser.email,
-      address: currentUser.address,
-      birthday: currentUser.birthday,
-      district: currentUser.district,
-      status: currentUser.status,
-      town: currentUser.town,
-      user_img: currentUser.user_img,
-      zipcode: currentUser.zipcode,
+        : currentUser.description,
+      
       // img: product.img,
     };
 
     console.log(formNewData);
 
-    const result = await updateNormalUser(
-      currentUser.user_id,
+    const result = await updatePost(
+      postId,
       formNewData,
       dispatch,
       token
@@ -139,11 +121,11 @@ export const PostUpdateImpl = () => {
   return (
     <div>
       <div className="productTitleContainer">
-        <h1 className="addTitle">User Detail Edit</h1>
+        <h1 className="addTitle">Post Detail Edit</h1>
         <div>
           <Button
             variant="contained"
-            href="/user"
+            href="/post"
             style={{ marginRight: 10 }}
             color="warning"
             // endIcon={<AddIcon />}
@@ -154,7 +136,7 @@ export const PostUpdateImpl = () => {
           {/* <button className="color-contained-button">Create</button> */}
           <Button
             variant="contained"
-            href="/createUser"
+            href="/createPost"
             // color="secondary"
             // endIcon={<AddIcon />}
           >
@@ -170,12 +152,12 @@ export const PostUpdateImpl = () => {
         <div className="productTopRight">
           <div className="productInfoTop">
             <img src={currentUser.user_img} alt="" className="productInfoImg" />
-            <span className="productName">User Details</span>
+            <span className="productName">Post Details</span>
           </div>
           <div className="productInfoBottom">
             <div className="productInfoItem">
-              <span className="productInfoKey">User ID:</span>
-              <span className="productInfoValue">{currentUser.user_id}</span>
+              <span className="productInfoKey">Post ID:</span>
+              <span className="productInfoValue">{postId}</span>
             </div>
             <div className="productInfoItem">
               <span className="productInfoKey">First Name:</span>
@@ -219,138 +201,25 @@ export const PostUpdateImpl = () => {
                 <Grid container spacing={2}>
                   <Grid item md={4}>
                     <TextField
-                      error={firstNameError}
-                      defaultValue={currentUser.first_name}
+                      error={descriptionError}
+                      defaultValue={currentUser.description}
                       variant="standard"
                       margin="normal"
                       // required
                       fullWidth
-                      id="first_name"
-                      label="First Name"
-                      name="first_name"
-                      autoComplete="first_name"
+                      id="description"
+                      label="Description"
+                      name="description"
+                      autoComplete="description"
                       autoFocus
-                      helperText={firstNameMessageError}
+                      helperText={descriptionMessageError}
                       onChange={() => {
-                        setFirstNameError(false);
-                        setFirstNameMessageError("");
+                        setdescriptionError(false);
+                        setdescriptionMessageError("");
                       }}
                     />
                   </Grid>
-                  <Grid item md={4}>
-                    <TextField
-                      error={lastNameError}
-                      defaultValue={currentUser.last_name}
-                      variant="standard"
-                      margin="normal"
-                      // required
-                      fullWidth
-                      id="last_name"
-                      label="Last Name"
-                      name="last_name"
-                      autoComplete="last_name"
-                      autoFocus
-                      helperText={lastNameMessageError}
-                      onChange={() => {
-                        setLastNameError(false);
-                        setLastNameMessageError("");
-                      }}
-                    />
-                  </Grid>
-                  {/* <Grid item md={4}>
-                    <TextField
-                      error={categoryError}
-                      defaultValue={currentUser.category}
-                      variant="standard"
-                      margin="normal"
-                      select
-                      // required
-                      fullWidth
-                      id="category"
-                      label="Category"
-                      name="category"
-                      autoComplete="category"
-                      autoFocus
-                      helperText={categoryMessageError}
-                      onChange={() => {
-                        setCategoryError(false);
-                        setCategoryMessageError("");
-                      }}
-                    >
-                      {categoryData.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Grid> */}
-                  {/* <Grid item md={4}>
-                    <TextField
-                      error={messureError}
-                      defaultValue={currentUser.contact}
-                      variant="standard"
-                      margin="normal"
-                      select
-                      // required
-                      fullWidth
-                      id="messure"
-                      label="UOM"
-                      name="messure"
-                      autoComplete="messure"
-                      autoFocus
-                      helperText={messureMessageError}
-                      onChange={() => {
-                        setMessureError(false);
-                        setMessureMessageError("");
-                      }}
-                    >
-                      {uomData.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Grid> */}
-                  <Grid item md={4}>
-                    <TextField
-                      error={contactError}
-                      defaultValue={currentUser.contact}
-                      variant="standard"
-                      margin="normal"
-                      // required
-                      fullWidth
-                      id="contact"
-                      label="Contact Number"
-                      name="contact"
-                      autoComplete="contact"
-                      autoFocus
-                      helperText={contactMessageError}
-                      onChange={() => {
-                        setContactError(false);
-                        setContactMessageError("");
-                      }}
-                    />
-                  </Grid>
-                  <Grid item md={4}>
-                    <TextField
-                      error={emailError}
-                      defaultValue={currentUser.email}
-                      variant="standard"
-                      margin="normal"
-                      // required
-                      fullWidth
-                      id="email"
-                      label="Email"
-                      name="email"
-                      autoComplete="email"
-                      autoFocus
-                      helperText={emailMessageError}
-                      onChange={() => {
-                        setEmailError(false);
-                        setEmailMessageError("");
-                      }}
-                    />
-                  </Grid>
+                  
                 </Grid>
               </Grid>
               <Grid item md={2}>

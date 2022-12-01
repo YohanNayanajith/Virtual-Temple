@@ -14,6 +14,12 @@ import { Profile } from "./pages/user/Profile";
 import { UserAdminList } from "./pages/user/UserAdminList";
 import { UserAdminUpdate } from "./pages/user/UserAdminUpdate";
 import { PostUpdate } from "./pages/post/PostUpdate";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { EventUpdate } from "./pages/event/EventUpdate";
+import { EventCreate } from "./pages/event/EventCreate";
+import { PostCreate } from "./pages/post/PostCreate";
+import { AdvertisementUpdate } from "./pages/advertisement/AdvertisementUpdate";
+import { AdvertisementCreate } from "./pages/advertisement/AdvertisementCreate";
 
 function App() {
   const theme = createTheme({
@@ -62,12 +68,18 @@ function App() {
           <Route path="/userAdmin" element={<UserAdminList />} />
           {/* Advertisement */}
           <Route path="/advertisement" element={<AdvertisementList />} />
+          <Route path="/updateAdvertisement/:id" element={<AdvertisementUpdate />} />
+          <Route path="/createAdvertisement" element={<AdvertisementCreate />} />
           {/* event */}
           <Route path="/event" element={<EventList />} />
+          <Route path="/updateEvent/:id" element={<EventUpdate />} />
+          <Route path="/createEvent" element={<EventCreate />} />
           {/* post */}
           <Route path="/post" element={<PostList />} />
-          <Route path="/createPost" element={<PostList />} />
+          <Route path="/createPost" element={<PostCreate />} />
           <Route path="/updatePost/:id" element={<PostUpdate />} />
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ThemeProvider>
     </StyledEngineProvider>

@@ -31,13 +31,7 @@ export const UserCreateImpl = () => {
   const [type, settype] = useState("");
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
-  const [allShow, setAllShow] = useState(false);
-  const [show, setShow] = useState(false);
   const [sizeForm, setSizeForm] = useState(6);
-  const [current_date, setCurrent_Date] = useState("");
-  const [employeeNo, setEmployeeNo] = useState(
-    "EMP" + Math.floor(Math.random() * 100000 + 1001)
-  );
 
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
