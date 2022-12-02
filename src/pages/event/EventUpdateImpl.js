@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { getUsers, updateNormalUser } from "../../redux/userApiCalls";
-import { updateEvent } from "../../redux/eventApiCalls";
+import { getEvent, updateEvent } from "../../redux/eventApiCalls";
 
 export const EventUpdateImpl = () => {
   const location = useLocation();
@@ -50,7 +50,7 @@ export const EventUpdateImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
-      const result = await getUsers(dispatch, token);
+      const result = await getEvent(dispatch, token);
       if (result) {
         console.log("Get user data success");
       } else {
