@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Box, Button, Chip, Grid } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -13,11 +13,14 @@ import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import { getAdminUsers } from "../../redux/userApiCalls";
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import LinearProgress from "@mui/material/LinearProgress";
+import { removeAdminUsers } from "../../redux/userRedux";
 
 export const UserAdminListImpl = () => {
+  const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.user.token);
-  const adminUsers = useSelector((state) => state.user.adminUsers.data);
+  const adminUsers = useSelector((state) => state.user.adminUsers);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -26,15 +29,17 @@ export const UserAdminListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
+      dispatch(removeAdminUsers());
       const result = await getAdminUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
+        setLoading(false);
       } else {
         console.log("Get user data unsuccess");
       }
     };
     getDataFromDB();
-  }, []);
+  }, [loading]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -117,7 +122,7 @@ export const UserAdminListImpl = () => {
         return (
           <div className="productListItem">
             <img className="productListImg" src={params.row.col4} alt="" />
-            {params.row.col1 +" "+ params.row.col2}
+            {params.row.col1 + " " + params.row.col2}
           </div>
         );
       },
@@ -202,32 +207,40 @@ export const UserAdminListImpl = () => {
         bgcolor: "#FFF",
       }}
     >
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      {loading ? (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      ) : (
         <div>
-          <h2>Admin Users</h2>
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            href="/createUser"
-            // color="secondary"
-            endIcon={<AddIcon />}
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Create
-          </Button>
+            <div>
+              <h2>Admin Users</h2>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                href="/createUser"
+                // color="secondary"
+                endIcon={<AddIcon />}
+              >
+                Create
+              </Button>
+            </div>
+
+            {/* <Button variant="contained">Contained1</Button> */}
+          </Grid>
+
+          <div style={{ marginTop: "20px" }}>
+            <TableComponent rows={rows} columns={columns} />
+          </div>
         </div>
-
-        {/* <Button variant="contained">Contained1</Button> */}
-      </Grid>
-
-      <div style={{ marginTop: "20px" }}>
-        <TableComponent rows={rows} columns={columns} />
-      </div>
+      )}
     </Box>
   );
 };
