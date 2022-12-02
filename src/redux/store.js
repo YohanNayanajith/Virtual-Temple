@@ -3,6 +3,7 @@ import userReducer from "./userRedux";
 import eventReducer from "./eventRedux";
 import postReducer from "./postRedux";
 import advertisementReducer from "./advertisementRedux";
+import permissionReducer from "./permissionRedux";
 import {
   persistStore,
   persistReducer,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   event: eventReducer,
   post: postReducer,
   advertisement:advertisementReducer,
+  permission:permissionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

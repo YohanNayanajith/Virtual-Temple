@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Chip, Grid, MenuItem, TextField } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
@@ -9,19 +9,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { getOnePermission, updatePermission } from "../../redux/permissionApiCalls";
 
 export const UserManagementImpl = () => {
   const [sizeForm, setSizeForm] = useState(6);
-  const [checked, setChecked] = React.useState({
-    adminUser: [false, false, false, false],
-    event: [false, false, false, false],
-    advertisement: [false, false, false, false],
-    post: [false, false, false, false],
-  });
-  const [checked1, setChecked1] = React.useState([false, false, false, false]);
-  console.log(checked);
+  const dispatch = useDispatch();
 
+  const token = useSelector((state) => state.user.token);
+  const permission = useSelector((state) => state.permission.permissions.data);
   const userId = window.location.pathname.split("/")[2];
+  console.log(userId);
+  console.log(permission);
+  const [checked, setChecked] = React.useState({
+    adminUser: [permission.view_users, permission.update_users, permission.create_users, permission.delete_users],
+    event: [permission.view_events, permission.update_events, permission.create_events, permission.delete_events],
+    advertisement: [permission.view_advertisement, permission.update_advertisement, permission.create_advertisement, permission.delete_advertisement],
+    post: [permission.view_posts, permission.update_posts, permission.create_posts, permission.delete_posts],
+  });
+
+  useEffect(()=>{
+    const getPermissionData = async ()=>{
+        //  "5b907c90-52d9-11ed-98e7-131b43a672d5"
+        const result = await getOnePermission(dispatch,token,userId);
+        if(result){
+            console.log("get permission");
+        }else{
+            console.log("no permission");
+        }
+    }
+    getPermissionData();
+  },[]);
 
   //   Admin User
   const handleChange1 = (event) => {
@@ -422,6 +439,13 @@ export const UserManagementImpl = () => {
       create_posts: checked.post[2],
     };
     console.log(formData);
+
+    const resultUpdate = await updatePermission(formData,dispatch,token);
+    if(resultUpdate){
+        console.log("Set");
+    }else{
+        console.log("Unset");
+    }
   };
 
   return (
