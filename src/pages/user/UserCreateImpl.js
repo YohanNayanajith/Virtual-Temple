@@ -14,7 +14,7 @@ import app from "../../firebase";
 import Swal from "sweetalert2";
 import { adminRegister, normalUserRegister } from "../../redux/userApiCalls";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const typeData = [
   {

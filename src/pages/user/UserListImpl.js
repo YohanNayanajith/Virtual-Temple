@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../redux/userApiCalls";
 import { TableComponent } from "../../components/TableComponent";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";

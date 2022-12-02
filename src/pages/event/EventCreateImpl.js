@@ -7,7 +7,7 @@ import SendIcon from "@mui/icons-material/Send";
 import app from "../../firebase";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { addEvent } from "../../redux/eventApiCalls";
 
 export const EventCreateImpl = () => {

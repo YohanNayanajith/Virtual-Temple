@@ -6,7 +6,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { getOnePermission, updatePermission } from "../../redux/permissionApiCalls";

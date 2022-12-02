@@ -13,7 +13,7 @@ import {
 import app from "../../firebase";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { addAdvertisement } from "../../redux/advertisementApiCalls";
 
 export const AdvertisementCreateImpl = () => {
