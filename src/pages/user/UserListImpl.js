@@ -14,6 +14,7 @@ import { useNavigate } from "react-router";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export const UserListImpl = () => {
   const token = useSelector((state) => state.user.token);
@@ -63,29 +64,6 @@ export const UserListImpl = () => {
     getNormalUserData();
   }, []);
 
-  // const rows = [
-  //   {
-  //     id: 1,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 2,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 3,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  // ];
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -107,6 +85,11 @@ export const UserListImpl = () => {
   const updateItem = (id) => {
     console.log(id);
     navigate(`/updateUser/${id}`);
+  };
+
+  const updatePermission = (id) => {
+    console.log(id);
+    navigate(`/userManagement/${id}`);
   };
   
   const wishBirthday = (data) => {
@@ -134,6 +117,7 @@ export const UserListImpl = () => {
   };
 
   const columns = [
+    { field: "id", headerName: "User Id", width: 300 },
     {
       field: "col1",
       headerName: "Full Name",
@@ -224,6 +208,14 @@ export const UserListImpl = () => {
                 onClick={() => updateItem(params.row.id)}
               >
                 <EditIcon />
+              </IconButton>
+              <IconButton
+                aria-label="edit"
+                size="large"
+                color="success"
+                onClick={() => updatePermission(params.row.id)}
+              >
+                <AdminPanelSettingsIcon />
               </IconButton>
               {/* <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
                 <DeleteIcon />

@@ -103,6 +103,7 @@ export const PostListImpl = () => {
   };
 
   const columns = [
+    { field: "id", headerName: "Post Id", width: 300 },
     {
       field: "col1",
       headerName: "Publish Username",

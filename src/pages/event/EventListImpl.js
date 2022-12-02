@@ -63,30 +63,6 @@ export const EventListImpl = () => {
     getNormalUserData();
   }, []);
 
-  // const rows = [
-  //   {
-  //     id: 1,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 2,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  //   {
-  //     id: 3,
-  //     col1: "Mango",
-  //     col2: "Category 1",
-  //     col3: 152,
-  //     col4: 1000,
-  //   },
-  // ];
-
   const deleteItem = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -134,6 +110,7 @@ export const EventListImpl = () => {
   };
 
   const columns = [
+    { field: "id", headerName: "Event Id", width: 300 },
     {
       field: "col1",
       headerName: "Event Name",

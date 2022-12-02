@@ -152,7 +152,7 @@ export const AdvertisementUpdateImpl = () => {
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">
-            <img src={currentUser.user_img} alt="" className="productInfoImg" />
+            <img src={currentUser.image_url} alt="" className="productInfoImg" />
             <span className="productName">Advertisement Details</span>
           </div>
           <div className="productInfoBottom">

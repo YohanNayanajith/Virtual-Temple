@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import { getAdminUsers } from "../../redux/userApiCalls";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export const UserAdminListImpl = () => {
   const token = useSelector((state) => state.user.token);
@@ -82,6 +83,10 @@ export const UserAdminListImpl = () => {
     console.log(id);
     navigate(`/updateAdminUser/${id}`);
   };
+  const updatePermission = (id) => {
+    console.log(id);
+    navigate(`/userManagement/${id}`);
+  };
 
   const changeItem = (id) => {
     console.log(id);
@@ -103,6 +108,7 @@ export const UserAdminListImpl = () => {
   };
 
   const columns = [
+    { field: "id", headerName: "Admin Id", width: 300 },
     {
       field: "col1",
       headerName: "Full Name",
@@ -170,6 +176,14 @@ export const UserAdminListImpl = () => {
                 onClick={() => updateItem(params.row.id)}
               >
                 <EditIcon />
+              </IconButton>
+              <IconButton
+                aria-label="edit"
+                size="large"
+                color="success"
+                onClick={() => updatePermission(params.row.id)}
+              >
+                <AdminPanelSettingsIcon />
               </IconButton>
               {/* <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
                 <DeleteIcon />

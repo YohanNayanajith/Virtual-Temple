@@ -20,6 +20,7 @@ import { EventCreate } from "./pages/event/EventCreate";
 import { PostCreate } from "./pages/post/PostCreate";
 import { AdvertisementUpdate } from "./pages/advertisement/AdvertisementUpdate";
 import { AdvertisementCreate } from "./pages/advertisement/AdvertisementCreate";
+import { UserManagement } from "./pages/userManagement/UserManagement";
 
 function App() {
   const theme = createTheme({
@@ -78,6 +79,9 @@ function App() {
           <Route path="/post" element={<PostList />} />
           <Route path="/createPost" element={<PostCreate />} />
           <Route path="/updatePost/:id" element={<PostUpdate />} />
+
+          {/* user management */}
+          <Route path="/userManagement/:id" element={<UserManagement />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
