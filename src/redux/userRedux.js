@@ -4,8 +4,8 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     currentUser: [],
-    otherUsers: [],
-    adminUsers: [],
+    otherUsers: null,
+    adminUsers: null,
     isFetching: false,
     authorities:[],
     token: null,
@@ -27,13 +27,19 @@ const userSlice = createSlice({
       state.error = true;
     },
     logout: (state) => {
-      state.currentUser = [];
+      state.currentUser = null;
       state.isFetching = false;
       state.error = false;
       state.otherUsers = [];
       state.token = null;
       state.authorities = [];
-      state.adminUsers = [];
+      state.adminUsers = null;
+    },
+    removeAdminUsers: (state) => {
+      state.adminUsers = null;
+    },
+    removeOtherUsers: (state) => {
+      state.otherUsers = null;
     },
 
     //GET ALL
@@ -118,5 +124,7 @@ export const {
   addUserStart,
   addUserSuccess,
   addUserFailure,
+  removeAdminUsers,
+  removeOtherUsers
 } = userSlice.actions;
 export default userSlice.reducer;

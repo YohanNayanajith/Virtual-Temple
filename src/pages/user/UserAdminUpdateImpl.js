@@ -38,7 +38,7 @@ export const UserAdminUpdateImpl = () => {
   const token = useSelector((state) => state.user.token);
 
   const currentUser = useSelector((state) =>
-    state.user.adminUsers.data.find((user) => user.user_id == userId)
+    state.user.adminUsers.find((user) => user.user_id == userId)
   );
   console.log(currentUser);
 

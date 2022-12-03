@@ -44,7 +44,7 @@ export const EventUpdateImpl = () => {
   const userId = useSelector((state) => state.user.currentUser.user_id);
 
   const currentUser = useSelector((state) =>
-    state.event.events.data.find((user) => user.event_id == eventId)
+    state.event.events.find((user) => user.event_id == eventId)
   );
   console.log(currentUser);
 

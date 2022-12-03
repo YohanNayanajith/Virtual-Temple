@@ -16,7 +16,7 @@ export const UserManagementImpl = () => {
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.user.token);
-  const permission = useSelector((state) => state.permission.permissions.data);
+  const permission = useSelector((state) => state.permission.permissions);
   const userId = window.location.pathname.split("/")[2];
   console.log(userId);
   console.log(permission);

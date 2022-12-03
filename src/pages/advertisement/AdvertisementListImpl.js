@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from "react";
 import { Box, Button, Chip, Grid } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,11 +13,16 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import { getEvent } from "../../redux/eventApiCalls";
-import { getAdvertisement } from '../../redux/advertisementApiCalls';
+import { getAdvertisement } from "../../redux/advertisementApiCalls";
+import LinearProgress from "@mui/material/LinearProgress";
+import { removeAdvertisement } from "../../redux/advertisementRedux";
 
 export const AdvertisementListImpl = () => {
+  const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.user.token);
-  const advertisements = useSelector((state) => state.advertisement.advertisements.data);
+  const advertisements = useSelector(
+    (state) => state.advertisement.advertisements
+  );
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -26,15 +31,17 @@ export const AdvertisementListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
+      dispatch(removeAdvertisement());
       const result = await getAdvertisement(dispatch, token);
       if (result) {
         console.log("Get advertisement data success");
+        setLoading(false);
       } else {
         console.log("Get advertisement data unsuccess");
       }
     };
     getDataFromDB();
-  }, []);
+  }, [loading]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -182,33 +189,39 @@ export const AdvertisementListImpl = () => {
         bgcolor: "#FFF",
       }}
     >
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      {loading ? (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      ) : (
         <div>
-          <h2>Advertisements</h2>
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            href="/createAdvertisement"
-            // color="secondary"
-            endIcon={<AddIcon />}
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Create
-          </Button>
+            <div>
+              <h2>Advertisements</h2>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                href="/createAdvertisement"
+                // color="secondary"
+                endIcon={<AddIcon />}
+              >
+                Create
+              </Button>
+            </div>
+
+            {/* <Button variant="contained">Contained1</Button> */}
+          </Grid>
+          <div style={{ marginTop: "20px" }}>
+            <TableComponent rows={rows} columns={columns} />
+          </div>{" "}
         </div>
-
-        {/* <Button variant="contained">Contained1</Button> */}
-      </Grid>
-
-      <div style={{ marginTop: "20px" }}>
-        <TableComponent rows={rows} columns={columns} />
-      </div>
+      )}
     </Box>
   );
 };
-

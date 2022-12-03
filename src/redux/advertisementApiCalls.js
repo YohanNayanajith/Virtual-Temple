@@ -22,7 +22,7 @@ import {
           Authorization: `Bearer ${token}`,
         },
       });
-      dispatch(getAdvertisementSuccess(res.data));
+      dispatch(getAdvertisementSuccess(res.data.data));
       return 1;
     } catch (err) {
       dispatch(getAdvertisementFailure());

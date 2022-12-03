@@ -38,7 +38,7 @@ export const UserUpdateImpl = () => {
   const token = useSelector((state) => state.user.token);
 
   const currentUser = useSelector((state) =>
-    state.user.otherUsers.data.find((user) => user.user_id == userId)
+    state.user.otherUsers.find((user) => user.user_id == userId)
   );
   console.log(currentUser);
 

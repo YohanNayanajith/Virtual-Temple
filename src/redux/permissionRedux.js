@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const permissionSlice = createSlice({
   name: "permission",
   initialState: {
-    permissions:[],
+    permissions:null,
     isFetching: false,
     error: false,
   },
@@ -20,6 +20,9 @@ const permissionSlice = createSlice({
     getPermissionFailure: (state) => {
       state.isFetching = false;
       state.error = true;
+    },
+    removePermissions: (state) => {
+      state.permissions = null;
     },
     //DELETE
     deletePermissionStart: (state) => {
@@ -81,5 +84,6 @@ export const {
   addPermissionStart,
   addPermissionSuccess,
   addPermissionFailure,
+  removePermissions
 } = permissionSlice.actions;
 export default permissionSlice.reducer;

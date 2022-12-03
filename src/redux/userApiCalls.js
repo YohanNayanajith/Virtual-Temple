@@ -48,6 +48,7 @@ export const adminRegister = async (User, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(res);
     return 1;
   } catch (err) {
     Swal.fire({
@@ -82,7 +83,7 @@ export const getUsers = async (dispatch, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(getUserSuccess(res.data));
+    dispatch(getUserSuccess(res.data.data));
     return 1;
   } catch (err) {
     dispatch(getUserFailure());
@@ -98,7 +99,7 @@ export const getAdminUsers = async (dispatch, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(getAdminUserSuccess(res.data));
+    dispatch(getAdminUserSuccess(res.data.data));
     return 1;
   } catch (err) {
     dispatch(getUserFailure());

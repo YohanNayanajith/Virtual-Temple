@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const advertisementSlice = createSlice({
   name: "advertisement",
   initialState: {
-    advertisements:[],
+    advertisements:null,
     isFetching: false,
     error: false,
   },
@@ -20,6 +20,9 @@ const advertisementSlice = createSlice({
     getAdvertisementFailure: (state) => {
       state.isFetching = false;
       state.error = true;
+    },
+    removeAdvertisement: (state) => {
+      state.advertisements = null;
     },
     //DELETE
     deleteAdvertisementStart: (state) => {
@@ -81,5 +84,6 @@ export const {
   addAdvertisementStart,
   addAdvertisementSuccess,
   addAdvertisementFailure,
+  removeAdvertisement,
 } = advertisementSlice.actions;
 export default advertisementSlice.reducer;

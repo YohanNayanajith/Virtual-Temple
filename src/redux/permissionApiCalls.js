@@ -38,7 +38,7 @@ export const getOnePermission = async (dispatch, token, id) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      dispatch(getPermissionSuccess(res.data));
+      dispatch(getPermissionSuccess(res.data.data));
       return 1;
     } catch (err) {
       dispatch(getPermissionFailure());

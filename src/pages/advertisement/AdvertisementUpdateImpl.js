@@ -37,7 +37,7 @@ export const AdvertisementUpdateImpl = () => {
   const userId = useSelector((state) => state.user.currentUser.user_id);
 
   const currentUser = useSelector((state) =>
-    state.advertisement.advertisements.data.find(
+    state.advertisement.advertisements.find(
       (user) => user.advertisement_id == advertisementId
     )
   );

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const postSlice = createSlice({
   name: "post",
   initialState: {
-    posts:[],
+    posts:null,
     isFetching: false,
     error: false,
   },
@@ -20,6 +20,9 @@ const postSlice = createSlice({
     getPostFailure: (state) => {
       state.isFetching = false;
       state.error = true;
+    },
+    removePosts: (state) => {
+      state.posts = null;
     },
     //DELETE
     deletePostStart: (state) => {
@@ -81,5 +84,6 @@ export const {
   addPostStart,
   addPostSuccess,
   addPostFailure,
+  removePosts,
 } = postSlice.actions;
 export default postSlice.reducer;

@@ -22,7 +22,7 @@ export const getEvent = async (dispatch, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(getEventSuccess(res.data));
+    dispatch(getEventSuccess(res.data.data));
     return 1;
   } catch (err) {
     dispatch(getEventFailure());

@@ -22,7 +22,7 @@ export const getPost = async (dispatch, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(getPostSuccess(res.data));
+    dispatch(getPostSuccess(res.data.data));
     return 1;
   } catch (err) {
     dispatch(getPostFailure());

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Box, Button, Chip, Grid } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,11 +14,14 @@ import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import LinearProgress from "@mui/material/LinearProgress";
+import { removeOtherUsers } from "../../redux/userRedux";
 
 export const UserListImpl = () => {
+  const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.user.token);
-  const otherUsers = useSelector((state) => state.user.otherUsers.data);
+  const otherUsers = useSelector((state) => state.user.otherUsers);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -30,15 +33,17 @@ export const UserListImpl = () => {
       const result = await getUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
+        setLoading(false);
       } else {
         console.log("Get user data unsuccess");
       }
     };
     getDataFromDB();
-  }, []);
+  }, [loading]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
+      dispatch(removeOtherUsers());
       let rowData = [];
       otherUsers.map(
         (item) => {
@@ -63,7 +68,6 @@ export const UserListImpl = () => {
     };
     getNormalUserData();
   }, []);
-
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -91,7 +95,7 @@ export const UserListImpl = () => {
     console.log(id);
     navigate(`/userManagement/${id}`);
   };
-  
+
   const wishBirthday = (data) => {
     console.log(data);
     window.location.href = `https://api.whatsapp.com/send/?phone=${data.col7}`;
@@ -126,7 +130,7 @@ export const UserListImpl = () => {
         return (
           <div className="productListItem">
             <img className="productListImg" src={params.row.col4} alt="" />
-            {params.row.col1 +" "+ params.row.col2}
+            {params.row.col1 + " " + params.row.col2}
           </div>
         );
       },
@@ -145,14 +149,14 @@ export const UserListImpl = () => {
           <>
             {/* params.row.isCancel */}
             <Stack direction="row" alignItems="center" spacing={1}>
-            {params.row.col10}
+              {params.row.col10}
               <IconButton
                 aria-label="edit"
                 size="large"
                 color="success"
                 onClick={() => wishBirthday(params.row)}
               >
-                 <CelebrationIcon />
+                <CelebrationIcon />
               </IconButton>
             </Stack>
           </>
@@ -234,32 +238,40 @@ export const UserListImpl = () => {
         bgcolor: "#FFF",
       }}
     >
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      {loading ? (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      ) : (
         <div>
-          <h2>Normal Users</h2>
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            href="/createUser"
-            // color="secondary"
-            endIcon={<AddIcon />}
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Create
-          </Button>
+            <div>
+              <h2>Normal Users</h2>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                href="/createUser"
+                // color="secondary"
+                endIcon={<AddIcon />}
+              >
+                Create
+              </Button>
+            </div>
+
+            {/* <Button variant="contained">Contained1</Button> */}
+          </Grid>
+
+          <div style={{ marginTop: "20px" }}>
+            <TableComponent rows={rows} columns={columns} />
+          </div>
         </div>
-
-        {/* <Button variant="contained">Contained1</Button> */}
-      </Grid>
-
-      <div style={{ marginTop: "20px" }}>
-        <TableComponent rows={rows} columns={columns} />
-      </div>
+      )}
     </Box>
   );
 };

@@ -33,7 +33,7 @@ export const PostUpdateImpl = () => {
   const token = useSelector((state) => state.user.token);
 
   const currentUser = useSelector((state) =>
-    state.post.posts.data.find((post) => post.post_id == postId)
+    state.post.posts.find((post) => post.post_id == postId)
   );
   console.log(currentUser);
 

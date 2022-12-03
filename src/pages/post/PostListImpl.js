@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Box, Button, Chip, Grid } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,10 +15,13 @@ import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import { getEvent } from "../../redux/eventApiCalls";
 import { getPost } from "../../redux/postApiCalls";
+import LinearProgress from "@mui/material/LinearProgress";
+import { removePosts } from "../../redux/postRedux";
 
 export const PostListImpl = () => {
+  const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.user.token);
-  const posts = useSelector((state) => state.post.posts.data);
+  const posts = useSelector((state) => state.post.posts);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -30,15 +33,17 @@ export const PostListImpl = () => {
       const result = await getPost(dispatch, token);
       if (result) {
         console.log("Get post data success");
+        setLoading(false);
       } else {
         console.log("Get post data unsuccess");
       }
     };
     getDataFromDB();
-  }, []);
+  }, [loading]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
+      dispatch(removePosts());
       let rowData = [];
       posts.map(
         (item) => {
@@ -60,7 +65,6 @@ export const PostListImpl = () => {
     getNormalUserData();
   }, []);
 
- 
   const deleteItem = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -187,32 +191,40 @@ export const PostListImpl = () => {
         bgcolor: "#FFF",
       }}
     >
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      {loading ? (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      ) : (
         <div>
-          <h2>Posts</h2>
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            href="/createPost"
-            // color="secondary"
-            endIcon={<AddIcon />}
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Create
-          </Button>
+            <div>
+              <h2>Posts</h2>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                href="/createPost"
+                // color="secondary"
+                endIcon={<AddIcon />}
+              >
+                Create
+              </Button>
+            </div>
+
+            {/* <Button variant="contained">Contained1</Button> */}
+          </Grid>
+
+          <div style={{ marginTop: "20px" }}>
+            <TableComponent rows={rows} columns={columns} />
+          </div>
         </div>
-
-        {/* <Button variant="contained">Contained1</Button> */}
-      </Grid>
-
-      <div style={{ marginTop: "20px" }}>
-        <TableComponent rows={rows} columns={columns} />
-      </div>
+      )}
     </Box>
   );
 };

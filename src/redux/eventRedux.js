@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const eventSlice = createSlice({
   name: "event",
   initialState: {
-    events:[],
+    events:null,
     isFetching: false,
     error: false,
   },
@@ -20,6 +20,9 @@ const eventSlice = createSlice({
     getEventFailure: (state) => {
       state.isFetching = false;
       state.error = true;
+    },
+    removeEvents: (state) => {
+      state.events = null;
     },
     //DELETE
     deleteEventStart: (state) => {
@@ -81,5 +84,6 @@ export const {
   addEventStart,
   addEventSuccess,
   addEventFailure,
+  removeEvents
 } = eventSlice.actions;
 export default eventSlice.reducer;
