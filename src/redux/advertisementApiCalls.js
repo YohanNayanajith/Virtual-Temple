@@ -30,10 +30,14 @@ import {
     }
   };
   
-  export const deleteAdvertisement = async (id, dispatch) => {
+  export const deleteAdvertisement = async (id, dispatch,token) => {
     dispatch(deleteAdvertisementStart());
     try {
-      const res = await publicRequest.delete(`/advertisement/delete-advertisement?advertisement_id=${id}`);
+      const res = await publicRequest.delete(`/advertisement/delete-advertisement?advertisement_id=${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(res);
     //   dispatch(deleteAdvertisementSuccess(id));
       return 1;

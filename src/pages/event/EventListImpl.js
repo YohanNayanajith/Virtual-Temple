@@ -13,13 +13,14 @@ import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
-import { getEvent } from "../../redux/eventApiCalls";
+import { deleteEvent, getEvent } from "../../redux/eventApiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
 import { removeEvents } from "../../redux/eventRedux";
 
 export const EventListImpl = () => {
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState("s");
+  const [deleteTrigger, setDeleteTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const events = useSelector((state) => state.event.events);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
@@ -41,7 +42,7 @@ export const EventListImpl = () => {
       }
     };
     getDataFromDB();
-  }, [loading]);
+  }, [loading,deleteTrigger]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -68,7 +69,7 @@ export const EventListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, [trigger,dispatch,events]);
+  }, [trigger,dispatch,events,deleteTrigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -79,10 +80,17 @@ export const EventListImpl = () => {
       confirmButtonColor: "#378cbb",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
-        alert(id);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        // alert(id);
+        const status = await deleteEvent(id,dispatch,token);
+        if(status){
+          setDeleteTrigger(deleteTrigger+"z");
+          Swal.fire("Deleted!", "Your event has been deleted.", "success");
+        }else{
+          Swal.fire("Can't Delete!", "Your event has not been deleted.", "error");
+        }
+        
       }
     });
   };
@@ -185,9 +193,9 @@ export const EventListImpl = () => {
               >
                 <EditIcon />
               </IconButton>
-              {/* <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
+              <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
                 <DeleteIcon />
-              </IconButton> */}
+              </IconButton>
             </Stack>
           </>
         );

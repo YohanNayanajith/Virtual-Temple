@@ -13,13 +13,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import { getEvent } from "../../redux/eventApiCalls";
-import { getAdvertisement } from "../../redux/advertisementApiCalls";
+import { deleteAdvertisement, getAdvertisement } from "../../redux/advertisementApiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
 import { removeAdvertisement } from "../../redux/advertisementRedux";
 
 export const AdvertisementListImpl = () => {
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState("s");
+  const [deleteTrigger, setDeleteTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const advertisements = useSelector(
     (state) => state.advertisement.advertisements
@@ -43,7 +44,7 @@ export const AdvertisementListImpl = () => {
       }
     };
     getDataFromDB();
-  }, [loading]);
+  }, [loading,deleteTrigger]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -63,7 +64,7 @@ export const AdvertisementListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, [trigger,dispatch,advertisements]);
+  }, [trigger,dispatch,advertisements,deleteTrigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -74,10 +75,15 @@ export const AdvertisementListImpl = () => {
       confirmButtonColor: "#378cbb",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
-        alert(id);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        const status = await deleteAdvertisement(id,dispatch,token);
+        if(status){
+          setDeleteTrigger(deleteTrigger+"z");
+          Swal.fire("Deleted!", "Your event has been deleted.", "success");
+        }else{
+          Swal.fire("Can't Delete!", "Your event has not been deleted.", "error");
+        }
       }
     });
   };
@@ -174,9 +180,9 @@ export const AdvertisementListImpl = () => {
               >
                 <EditIcon />
               </IconButton>
-              {/* <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
+              <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
                 <DeleteIcon />
-              </IconButton> */}
+              </IconButton>
             </Stack>
           </>
         );

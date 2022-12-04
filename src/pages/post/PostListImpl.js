@@ -14,13 +14,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import { getEvent } from "../../redux/eventApiCalls";
-import { getPost } from "../../redux/postApiCalls";
+import { deletePost, getPost } from "../../redux/postApiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
 import { removePosts } from "../../redux/postRedux";
 
 export const PostListImpl = () => {
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState("s");
+  const [deleteTrigger, setDeleteTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const posts = useSelector((state) => state.post.posts);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
@@ -42,7 +43,7 @@ export const PostListImpl = () => {
       }
     };
     getDataFromDB();
-  }, [loading]);
+  }, [loading,deleteTrigger]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -65,7 +66,7 @@ export const PostListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, [trigger,dispatch]);
+  }, [trigger,dispatch,deleteTrigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -76,10 +77,15 @@ export const PostListImpl = () => {
       confirmButtonColor: "#378cbb",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
-        alert(id);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        const status = await deletePost(id,dispatch,token);
+        if(status){
+          setDeleteTrigger(deleteTrigger+"z");
+          Swal.fire("Deleted!", "Your post has been deleted.", "success");
+        }else{
+          Swal.fire("Can't Delete!", "Your post has not been deleted.", "error");
+        }
       }
     });
   };
@@ -176,9 +182,9 @@ export const PostListImpl = () => {
               >
                 <EditIcon />
               </IconButton>
-              {/* <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
+              <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
                 <DeleteIcon />
-              </IconButton> */}
+              </IconButton>
             </Stack>
           </>
         );

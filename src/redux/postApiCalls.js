@@ -30,10 +30,14 @@ export const getPost = async (dispatch, token) => {
   }
 };
 
-export const deletePost = async (id, dispatch) => {
+export const deletePost = async (id, dispatch,token) => {
   dispatch(deletePostStart());
   try {
-    const res = await publicRequest.delete(`/post/delete/${id}`);
+    const res = await publicRequest.delete(`/post/delete-post?post_id=${id}`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log(res);
     //   dispatch(deletePostSuccess(id));
     return 1;

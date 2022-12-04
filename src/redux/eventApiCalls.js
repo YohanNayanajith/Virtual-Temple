@@ -30,11 +30,16 @@ export const getEvent = async (dispatch, token) => {
   }
 };
 
-export const deleteEvent = async (id, dispatch) => {
+export const deleteEvent = async (id, dispatch,token) => {
   dispatch(deleteEventStart());
   try {
-    const res = await publicRequest.delete(`/event/delete/${id}`);
-    dispatch(deleteEventSuccess(id));
+    const res = await publicRequest.delete(`/event/delete-event?event_id=${id}`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // dispatch(deleteEventSuccess(id));
+    console.log(res);
     return 1;
   } catch (err) {
     dispatch(deleteEventFailure());
