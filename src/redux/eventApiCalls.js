@@ -30,6 +30,21 @@ export const getEvent = async (dispatch, token) => {
   }
 };
 
+export const getEventDummy = async (dispatch, token) => {
+  dispatch(getEventStart());
+  try {
+    const res = await publicRequest.get("/event", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.data;
+  } catch (err) {
+    dispatch(getEventFailure());
+    return 0;
+  }
+};
+
 export const deleteEvent = async (id, dispatch,token) => {
   dispatch(deleteEventStart());
   try {

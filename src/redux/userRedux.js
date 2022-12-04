@@ -41,6 +41,9 @@ const userSlice = createSlice({
     removeOtherUsers: (state) => {
       state.otherUsers = null;
     },
+    currentUserSet: (state, action) => {
+      state.currentUser = action.payload;
+    },
 
     //GET ALL
     getUserStart: (state) => {
@@ -125,6 +128,7 @@ export const {
   addUserSuccess,
   addUserFailure,
   removeAdminUsers,
-  removeOtherUsers
+  removeOtherUsers,
+  currentUserSet
 } = userSlice.actions;
 export default userSlice.reducer;

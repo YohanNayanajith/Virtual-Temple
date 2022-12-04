@@ -147,7 +147,7 @@ export const PostUpdateImpl = () => {
       </div>
       <div className="productTop">
         <div className="productTopLeft">
-          <Charts data={pStats} dataKey1="Sales" title="Post Registration" />
+          {/* <Charts data={pStats} dataKey1="Sales" title="Post Registration" /> */}
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">

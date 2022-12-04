@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box,Button } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
@@ -21,8 +21,14 @@ export const ProfileImpl = () => {
     <Grid container direction="column">
       <Grid container direction="row" justifyContent="space-between">
         <Grid item xs={6}>
-          <Typography variant="h3">Create Post</Typography>
+          <Typography variant="h3">User Profile</Typography>
         </Grid>
+        <Button
+          variant="contained"
+          href="/profileUpdate"
+        >
+          Update
+        </Button>
       </Grid>
       <Stack
         direction="row"

@@ -166,7 +166,7 @@ export const UserAdminUpdateImpl = () => {
       </div>
       <div className="productTop">
         <div className="productTopLeft">
-          <Charts data={pStats} dataKey1="Sales" title="User Registration" />
+          {/* <Charts data={pStats} dataKey1="Sales" title="User Registration" /> */}
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">

@@ -16,6 +16,7 @@ import {
   addUserStart,
   addUserSuccess,
   addUserFailure,
+  currentUserSet
 } from "./userRedux";
 import { publicRequest, userRequest } from "../requestMethods";
 import Swal from "sweetalert2";
@@ -91,6 +92,21 @@ export const getUsers = async (dispatch, token) => {
   }
 };
 
+export const getUsersDummy = async (dispatch, token) => {
+  dispatch(getUserStart());
+  try {
+    const res = await publicRequest.get("/user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.data;
+  } catch (err) {
+    dispatch(getUserFailure());
+    return 0;
+  }
+};
+
 export const getAdminUsers = async (dispatch, token) => {
   dispatch(getUserStart());
   try {
@@ -100,6 +116,37 @@ export const getAdminUsers = async (dispatch, token) => {
       },
     });
     dispatch(getAdminUserSuccess(res.data.data));
+    return 1;
+  } catch (err) {
+    dispatch(getUserFailure());
+    return 0;
+  }
+};
+
+export const getAdminUsersDummy = async (dispatch, token) => {
+  dispatch(getUserStart());
+  try {
+    const res = await publicRequest.get("/local_user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.data;
+  } catch (err) {
+    dispatch(getUserFailure());
+    return 0;
+  }
+};
+
+export const getAdminUser = async (dispatch, token, id) => {
+  dispatch(getUserStart());
+  try {
+    const res = await publicRequest.get(`/local_user/getUser?userId=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch(currentUserSet(res.data.data));
     return 1;
   } catch (err) {
     dispatch(getUserFailure());

@@ -2,12 +2,30 @@ import { useEffect, useMemo, useState } from "react";
 import FeaturedInfo from "../components/featuredInfo/FeaturedInfo";
 import Charts from "../components/charts/Charts";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  getAdminUsers,
+  getAdminUsersDummy,
+  getUsers,
+  getUsersDummy,
+} from "../redux/userApiCalls";
+import { getEvent, getEventDummy } from "../redux/eventApiCalls";
+import LinearProgress from "@mui/material/LinearProgress";
+import Box from "@mui/material/Box";
 
 export const DashboardImpl = () => {
   const [userStats, setUserStats] = useState([]);
+  const [other, setOther] = useState(0);
+  const [admin, setAdmin] = useState(0);
+  const [event, setEvent] = useState(0);
+  const [loading1, setLoading1] = useState(true);
+  const [loading2, setLoading2] = useState(true);
+  const [loading3, setLoading3] = useState(true);
   const [featuredData, setFeaturedData] = useState([]);
   const dispatch = useDispatch();
-//   const inventoryCount = useSelector((state) => state.product.count);
+  const token = useSelector((state) => state.user.token);
+  const otherUsers = useSelector((state) => state.user.otherUsers);
+  const adminUsers = useSelector((state) => state.user.adminUsers);
+  const events = useSelector((state) => state.event.events);
 
   const MONTHS = useMemo(
     () => [
@@ -27,13 +45,76 @@ export const DashboardImpl = () => {
     []
   );
 
-//   useEffect(() => {
-//     const getCountInventoryData = async () => {
-//       await countProduct(dispatch);
-//     };
+  useEffect(() => {
+    const getCountInventoryData = async () => {
+      const result1 = await getUsersDummy(dispatch, token);
+      if (result1) {
+        setOther(result1.length);
+        console.log("Success");
+        setLoading1(false);
+      } else {
+        console.log("Unsuccess");
+      }
+    };
+    getCountInventoryData();
+  }, []);
 
-//     getCountInventoryData();
-//   }, []);
+  useEffect(() => {
+    const getCountInventoryData = async () => {
+      const result2 = await getAdminUsersDummy(dispatch, token);
+      if (result2) {
+        console.log(result2.length);
+        console.log(admin);
+        setAdmin(result2.length);
+        console.log("Success");
+        setLoading2(false);
+      } else {
+        console.log("Unsuccess");
+      }
+    };
+    getCountInventoryData();
+  }, []);
+
+  useEffect(() => {
+    const getCountInventoryData = async () => {
+      const result = await getEventDummy(dispatch, token);
+      if (result) {
+        setEvent(result.length);
+        setLoading3(false);
+        console.log("Success");
+      } else {
+        console.log("Unsuccess");
+      }
+    };
+    getCountInventoryData();
+  }, []);
+
+  let featureData = [
+    {
+      index: 1,
+      title: "No of Users",
+      number: other,
+      // percentage: -1.4,
+      isDowngrade: false,
+      // text: "Compared to last month",
+    },
+    {
+      index: 2,
+      title: "No of Events",
+      number: event,
+      // percentage: +1.4,
+      isDowngrade: true,
+      // text: "Compared to last month",
+    },
+    {
+      index: 3,
+      title: "No of Admin Users",
+      number: admin,
+      // percentage: -1.4,
+      isDowngrade: false,
+      // text: "Compared to last month",
+    },
+  ];
 
   useEffect(() => {
     let data = [
@@ -46,45 +127,25 @@ export const DashboardImpl = () => {
     ];
     setUserStats(data);
 
-    let featureData = [
-      {
-        index: 1,
-        title: "No of Users",
-        number: 5,
-        // percentage: -1.4,
-        isDowngrade: false,
-        text: "Compared to last month",
-      },
-      {
-        index: 2,
-        title: "New Events Items",
-        number: 15,
-        // percentage: +1.4,
-        isDowngrade: true,
-        text: "Compared to last month",
-      },
-      {
-        index: 3,
-        title: "No of Admin Users",
-        number: 8,
-        // percentage: -1.4,
-        isDowngrade: false,
-        text: "Compared to last month",
-      },
-    ];
-    setFeaturedData(featureData);
+    // setFeaturedData(featureData);
   }, []);
 
   return (
     <div>
-      <FeaturedInfo data={featuredData} />
-      <Charts
+      {loading1 && loading2 && loading3 ? (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      ) : (
+        <FeaturedInfo data={featureData} />
+      )}
+      {/* <Charts
         data={userStats}
         title="Users Analytics"
         grid
         dataKey1="User"
         dataKey2="Admin"
-      />
+      /> */}
     </div>
   );
 };

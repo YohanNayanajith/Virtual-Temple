@@ -21,6 +21,7 @@ import { PostCreate } from "./pages/post/PostCreate";
 import { AdvertisementUpdate } from "./pages/advertisement/AdvertisementUpdate";
 import { AdvertisementCreate } from "./pages/advertisement/AdvertisementCreate";
 import { UserManagement } from "./pages/userManagement/UserManagement";
+import { ProfileUpdate } from "./pages/user/ProfileUpdate";
 
 function App() {
   const theme = createTheme({
@@ -66,6 +67,7 @@ function App() {
           <Route path="/updateUser/:id" element={<UserUpdate />} />
           <Route path="/updateAdminUser/:id" element={<UserAdminUpdate />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profileUpdate" element={<ProfileUpdate />} />
           <Route path="/userAdmin" element={<UserAdminList />} />
           {/* Advertisement */}
           <Route path="/advertisement" element={<AdvertisementList />} />

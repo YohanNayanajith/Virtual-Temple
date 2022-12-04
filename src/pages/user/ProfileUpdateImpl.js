@@ -1,5 +1,5 @@
 import React from "react";
-import "../user/UserUpdateImpl.css";
+import "./UserUpdateImpl.css";
 import { Link, useLocation } from "react-router-dom";
 import Charts from "../../components/charts/Charts";
 import { useEffect, useMemo, useState } from "react";
@@ -11,49 +11,50 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { getUsers, updateNormalUser } from "../../redux/userApiCalls";
-import { updateEvent } from "../../redux/eventApiCalls";
-import { getAdvertisement, updateAdvertisement } from "../../redux/advertisementApiCalls";
+import {
+    getAdminUser,
+  getAdminUsers,
+  getUsers,
+  updateAdminNormalUser,
+  updateNormalUser,
+} from "../../redux/userApiCalls";
 
-export const AdvertisementUpdateImpl = () => {
+export const ProfileUpdateImpl = () => {
   const location = useLocation();
-  // const productId = location.pathname.split("/")[3];
-  const advertisementId = window.location.pathname.split("/")[2];
   // console.log(productId);
   const [pStats, setPStats] = useState([]);
   const [show, setShow] = useState(false);
-  const [trigger, setTrigger] = useState("success");
+  const [triggerAdmin, setTriggerAdmin] = useState("success");
   const [formSaveData, setFormSaveData] = useState([]);
 
-  const [descriptionError, setdescriptionError] = useState(false);
-  const [urlError, seturlError] = useState(false);
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
+  const [contactError, setContactError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
-  const [descriptionMessageError, setdescriptionMessageError] = useState("");
-  const [urlMessageError, seturlMessageError] = useState("");
+  const [firstNameMessageError, setFirstNameMessageError] = useState("");
+  const [lastNameMessageError, setLastNameMessageError] = useState("");
+  const [contactMessageError, setContactMessageError] = useState("");
+  const [emailMessageError, setEmailMessageError] = useState("");
 
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.user.token);
-  const userId = useSelector((state) => state.user.currentUser.user_id);
 
-  const currentUser = useSelector((state) =>
-    state.advertisement.advertisements.find(
-      (user) => user.advertisement_id == advertisementId
-    )
-  );
+  const currentUser = useSelector((state) => state.user.currentUser);
   console.log(currentUser);
 
   React.useEffect(() => {
-    const getDataFromDB = async () => {
-      const result = await getAdvertisement(dispatch, token);
+    const getDataFromDBAdmin = async () => {
+      const result = await getAdminUser(dispatch, token, currentUser.user_id);
       if (result) {
         console.log("Get user data success");
       } else {
         console.log("Get user data unsuccess");
       }
     };
-    getDataFromDB();
-  }, [trigger]);
+    getDataFromDBAdmin();
+  }, [triggerAdmin]);
   // const otherUsers = useSelector((state) => state.user.otherUsers.data);
 
   const MONTHS = useMemo(
@@ -90,21 +91,39 @@ export const AdvertisementUpdateImpl = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formNewData = {
-      advertisement_id: advertisementId,
-      image_url: currentUser.image_url,
-      description: formData.get("description")
-        ? formData.get("description")
-        : currentUser.description,
-      url: formData.get("url") ? formData.get("url") : currentUser.url,
+      user_id: currentUser.user_id,
+      first_name: formData.get("first_name")
+        ? formData.get("first_name")
+        : currentUser.first_name,
+      last_name: formData.get("last_name")
+        ? formData.get("last_name")
+        : currentUser.last_name,
+      contact: formData.get("contact")
+        ? formData.get("contact")
+        : currentUser.contact,
+      email: formData.get("email") ? formData.get("email") : currentUser.email,
+      address: currentUser.address,
+      birthday: currentUser.birthday,
+      district: currentUser.district,
+      status: currentUser.status,
+      town: currentUser.town,
+      user_img: currentUser.user_img,
+      zipcode: currentUser.zipcode,
+      role_id: currentUser.role_id,
+      // img: product.img,
     };
 
     console.log(formNewData);
 
-    const result = await updateAdvertisement(formNewData, dispatch, token);
-
-    setTrigger(trigger + "su");
+    const result = await updateAdminNormalUser(
+      currentUser.user_id,
+      formNewData,
+      dispatch,
+      token
+    );
     // console.log(result);
     if (result) {
+      setTriggerAdmin(triggerAdmin + "yk");
       console.log("Success");
       Swal.fire({
         icon: "success",
@@ -122,11 +141,11 @@ export const AdvertisementUpdateImpl = () => {
   return (
     <div>
       <div className="productTitleContainer">
-        <h1 className="addTitle">Advertisement Detail Edit</h1>
+        <h1 className="addTitle">User Detail Edit</h1>
         <div>
           <Button
             variant="contained"
-            href="/advertisement"
+            href="/profile"
             style={{ marginRight: 10 }}
             color="warning"
             // endIcon={<AddIcon />}
@@ -135,50 +154,41 @@ export const AdvertisementUpdateImpl = () => {
           </Button>
           {/* <Link to="/createUser"> */}
           {/* <button className="color-contained-button">Create</button> */}
-          <Button
-            variant="contained"
-            href="/createAdvertisement"
-            // color="secondary"
-            // endIcon={<AddIcon />}
-          >
-            Create
-          </Button>
+
           {/* </Link> */}
         </div>
       </div>
       <div className="productTop">
         <div className="productTopLeft">
-          {/* <Charts data={pStats} dataKey1="Sales" title="Advertisement Registration" /> */}
+          {/* <Charts data={pStats} dataKey1="Sales" title="User Registration" /> */}
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">
-            <img src={currentUser.image_url} alt="" className="productInfoImg" />
-            <span className="productName">Advertisement Details</span>
+            <img src={currentUser.user_img} alt="" className="productInfoImg" />
+            <span className="productName">User Details</span>
           </div>
           <div className="productInfoBottom">
             <div className="productInfoItem">
-              <span className="productInfoKey">Advertisement ID:</span>
-              <span className="productInfoValue">{advertisementId}</span>
+              <span className="productInfoKey">User ID:</span>
+              <span className="productInfoValue">{currentUser.user_id}</span>
             </div>
             <div className="productInfoItem">
-              <span className="productInfoKey">Advertisement Description:</span>
-              <span className="productInfoValue">{currentUser.description}</span>
-            </div>
-            {/* <div className="productInfoItem">
-              <span className="productInfoKey">Event Date:</span>
-              <span className="productInfoValue">{currentUser.event_date}</span>
+              <span className="productInfoKey">First Name:</span>
+              <span className="productInfoValue">{currentUser.first_name}</span>
             </div>
             <div className="productInfoItem">
-              <span className="productInfoKey">Location:</span>
-              <span className="productInfoValue">
-                {currentUser.event_location}
-              </span>
-            </div> */}
+              <span className="productInfoKey">Last Name:</span>
+              <span className="productInfoValue">{currentUser.last_name}</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">Email:</span>
+              <span className="productInfoValue">{currentUser.email}</span>
+            </div>
           </div>
         </div>
       </div>
       <div className="productBottom">
-        <h2 className="h3Title">Update Advertisement</h2>
+        <h2 className="h3Title">Update User</h2>
         <Box
           sx={{
             my: 1,
@@ -204,96 +214,82 @@ export const AdvertisementUpdateImpl = () => {
                 <Grid container spacing={2}>
                   <Grid item md={4}>
                     <TextField
-                      error={descriptionError}
-                      defaultValue={currentUser.description}
+                      error={firstNameError}
+                      defaultValue={currentUser.first_name}
                       variant="standard"
                       margin="normal"
                       // required
                       fullWidth
-                      id="description"
-                      label="Description"
-                      name="description"
-                      autoComplete="description"
+                      id="first_name"
+                      label="First Name"
+                      name="first_name"
+                      autoComplete="first_name"
                       autoFocus
-                      helperText={descriptionMessageError}
+                      helperText={firstNameMessageError}
                       onChange={() => {
-                        setdescriptionError(false);
-                        setdescriptionMessageError("");
+                        setFirstNameError(false);
+                        setFirstNameMessageError("");
                       }}
                     />
                   </Grid>
-                  {/* <Grid item md={4}>
+                  <Grid item md={4}>
                     <TextField
-                      error={categoryError}
-                      defaultValue={currentUser.category}
+                      error={lastNameError}
+                      defaultValue={currentUser.last_name}
                       variant="standard"
                       margin="normal"
-                      select
                       // required
                       fullWidth
-                      id="category"
-                      label="Category"
-                      name="category"
-                      autoComplete="category"
+                      id="last_name"
+                      label="Last Name"
+                      name="last_name"
+                      autoComplete="last_name"
                       autoFocus
-                      helperText={categoryMessageError}
+                      helperText={lastNameMessageError}
                       onChange={() => {
-                        setCategoryError(false);
-                        setCategoryMessageError("");
+                        setLastNameError(false);
+                        setLastNameMessageError("");
                       }}
-                    >
-                      {categoryData.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Grid> */}
-                  {/* <Grid item md={4}>
+                    />
+                  </Grid>
+
+                  <Grid item md={4}>
                     <TextField
-                      error={messureError}
+                      error={contactError}
                       defaultValue={currentUser.contact}
                       variant="standard"
                       margin="normal"
-                      select
                       // required
                       fullWidth
-                      id="messure"
-                      label="UOM"
-                      name="messure"
-                      autoComplete="messure"
+                      id="contact"
+                      label="Contact Number"
+                      name="contact"
+                      autoComplete="contact"
                       autoFocus
-                      helperText={messureMessageError}
+                      helperText={contactMessageError}
                       onChange={() => {
-                        setMessureError(false);
-                        setMessureMessageError("");
+                        setContactError(false);
+                        setContactMessageError("");
                       }}
-                    >
-                      {uomData.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Grid> */}
+                    />
+                  </Grid>
                   <Grid item md={4}>
                     <TextField
-                      error={urlError}
-                      defaultValue={currentUser.url}
+                      error={emailError}
+                      defaultValue={currentUser.email}
                       variant="standard"
                       margin="normal"
                       // required
-                      type="text"
                       fullWidth
-                      id="url"
-                      label="Url"
-                      name="url"
-                      autoComplete="url"
+                      id="email"
+                      label="Email"
+                      name="email"
+                      autoComplete="email"
                       autoFocus
-                      helperText={urlMessageError}
+                      helperText={emailMessageError}
                       onChange={() => {
-                        seturlError(false);
-                        seturlMessageError("");
+                        setEmailError(false);
+                        setEmailMessageError("");
                       }}
                     />
                   </Grid>
