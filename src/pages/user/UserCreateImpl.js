@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import { adminRegister, normalUserRegister } from "../../redux/userApiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addPermission } from "../../redux/permissionApiCalls";
 
 const typeData = [
   {
@@ -62,6 +63,7 @@ export const UserCreateImpl = () => {
   const [birthdayMessageError, setBirthdayMessageError] = useState("");
 
   const token = useSelector((state) => state.user.token);
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -131,15 +133,9 @@ export const UserCreateImpl = () => {
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
-      // Register three observers:
-      // 1. 'state_changed' observer, called any time the state changes
-      // 2. Error observer, called on failure
-      // 3. Completion observer, called on successful completion
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           const prevProgress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
@@ -193,17 +189,6 @@ export const UserCreateImpl = () => {
                 // timer: 2000,
               });
               navigate("/user");
-              // e.target.firstName = "";
-              // e.target.lastName = "";
-              // e.target.email = "";
-              // e.target.town = "";
-              // e.target.address = "";
-              // e.target.zipcode = "";
-              // e.target.district = "";
-              // e.target.mobileNumber = "";
-              // e.target.password = "";
-              // e.target.confirmPassword = "";
-              // e.target.birthday = "";
             } else {
               Swal.fire({
                 icon: "error",
@@ -220,6 +205,7 @@ export const UserCreateImpl = () => {
 
   const callAdmin = async (userData)=>{
     const status = await adminRegister(userData, token);
+    //user management create
     return status;
   }
   const callNormalUser = async (userData)=>{

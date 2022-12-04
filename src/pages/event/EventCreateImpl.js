@@ -9,6 +9,12 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addEvent } from "../../redux/eventApiCalls";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 export const EventCreateImpl = () => {
   const [type, settype] = useState("");
@@ -35,8 +41,6 @@ export const EventCreateImpl = () => {
   const token = useSelector((state) => state.user.token);
   const userId = useSelector((state) => state.user.currentUser.user_id);
   const navigate = useNavigate();
-  console.log(token);
-  console.log(userId);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -61,13 +65,13 @@ export const EventCreateImpl = () => {
 
     if (!data.get("event_name")) {
       setevent_nameError(true);
-      setevent_nameMessageError("First Name can't be empty!");
+      setevent_nameMessageError("Event Name can't be empty!");
     } else if (!data.get("description")) {
       setdescriptionError(true);
-      setdescriptionMessageError("Last Name can't be empty!");
+      setdescriptionMessageError("Description can't be empty!");
     } else if (!data.get("event_location")) {
       setevent_locationError(true);
-      setevent_locationMessageError("Event  location can't be empty!");
+      setevent_locationMessageError("Event location can't be empty!");
     } else if (!data.get("event_date")) {
       setevent_dateError(true);
       setevent_dateMessageError("Event date can't be empty!");
@@ -76,39 +80,92 @@ export const EventCreateImpl = () => {
       setevent_timeMessageError("Event time can't be empty!");
     } else if (!data.get("price")) {
       setpriceError(true);
-      setpriceMessageError("Price can't be empty!");
+      setpriceMessageError("Event price can't be empty!");
     } else {
-      const status = await addEvent(formData, token);
 
-      if (status) {
-        Swal.fire({
-          title: "Success!",
-          text: "Event added success!",
-          icon: "success",
-          confirmButtonText: "Ok",
-          confirmButtonColor: "#378cbb",
-          // showConfirmButton: false,
-          // timer: 2000,
-        });
-        navigate("/user");
-        // e.target.event_name = "";
-        // e.target.description = "";
-        // e.target.email = "";
-        // e.target.event_location = "";
-        // e.target.event_date = "";
-        // e.target.event_time = "";
-        // e.target.price = "";
-        // e.target.mobileNumber = "";
-        // e.target.password = "";
-        // e.target.confirmPassword = "";
-        // e.target.birthday = "";
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Event added unsuccess!",
-        });
-      }
+      const fileName = new Date().getTime() + file.name;
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const prevProgress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          console.log("Upload is " + prevProgress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+            default:
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Image added unsuccess!",
+          });
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            let userData = {
+              ...formData,
+              event_image: downloadURL,
+            };
+
+            const status = addEvent(userData, token);
+
+            if (status) {
+              Swal.fire({
+                title: "Success!",
+                text: "Event added success!",
+                icon: "success",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#378cbb",
+                // showConfirmButton: false,
+                // timer: 2000,
+              });
+              navigate("/event");
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Event added unsuccess!",
+              });
+            }
+          });
+        }
+      );
+
+      
+
+      // if (status) {
+      //   Swal.fire({
+      //     title: "Success!",
+      //     text: "Event added success!",
+      //     icon: "success",
+      //     confirmButtonText: "Ok",
+      //     confirmButtonColor: "#378cbb",
+      //     // showConfirmButton: false,
+      //     // timer: 2000,
+      //   });
+      //   navigate("/event");
+      // } else {
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Oops...",
+      //     text: "Event added unsuccess!",
+      //   });
+      // }
     }
 
     console.log(formData);
@@ -288,6 +345,28 @@ export const EventCreateImpl = () => {
                     setInputs((prev) => {
                       return { ...prev, [e.target.name]: e.target.value };
                     });
+                  }}
+                />
+              </Grid>
+              <Grid item md={sizeForm}>
+                <TextField
+                  // error={imageError}
+                  // defaultValue={null}
+                  // variant="standard"
+                  type="file"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="file"
+                  label="Image"
+                  name="file"
+                  autoComplete="file"
+                  autoFocus
+                  // helperText={imageMessageError}
+                  onChange={(e) => {
+                    // setImageError(false);
+                    // setImageMessageError("");
+                    setFile(e.target.files[0]);
                   }}
                 />
               </Grid>

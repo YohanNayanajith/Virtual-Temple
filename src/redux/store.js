@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
   event: eventReducer,
   post: postReducer,
   advertisement:advertisementReducer,
-  permission:permissionReducer,
+  permissionData:permissionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

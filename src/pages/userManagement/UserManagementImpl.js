@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, Chip, Grid, MenuItem, TextField } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
@@ -9,36 +9,75 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { getOnePermission, updatePermission } from "../../redux/permissionApiCalls";
+import {
+  getOnePermission,
+  updatePermission,
+} from "../../redux/permissionApiCalls";
+import { removePermissions } from "../../redux/permissionRedux";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export const UserManagementImpl = () => {
   const [sizeForm, setSizeForm] = useState(6);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState("s");
 
   const token = useSelector((state) => state.user.token);
-  const permission = useSelector((state) => state.permission.permissions);
+  const permissionState = useSelector(
+    (state) => state.permissionData.permissionsData
+  );
   const userId = window.location.pathname.split("/")[2];
-  console.log(userId);
-  console.log(permission);
-  const [checked, setChecked] = React.useState({
-    adminUser: [permission.view_users, permission.update_users, permission.create_users, permission.delete_users],
-    event: [permission.view_events, permission.update_events, permission.create_events, permission.delete_events],
-    advertisement: [permission.view_advertisement, permission.update_advertisement, permission.create_advertisement, permission.delete_advertisement],
-    post: [permission.view_posts, permission.update_posts, permission.create_posts, permission.delete_posts],
+  // console.log(userId);
+  // console.log(permissionState);
+
+  const [checked, setChecked] = useState({
+    adminUser: [false, false, false, false],
+    event: [false, false, false, false],
+    advertisement: [false, false, false, false],
+    post: [false, false, false, false],
   });
 
-  useEffect(()=>{
-    const getPermissionData = async ()=>{
-        //  "5b907c90-52d9-11ed-98e7-131b43a672d5"
-        const result = await getOnePermission(dispatch,token,userId);
-        if(result){
-            console.log("get permission");
-        }else{
-            console.log("no permission");
-        }
-    }
-    getPermissionData();
-  },[]);
+  React.useEffect(() => {
+    const getPermissionsDataFromDB = async () => {
+      dispatch(removePermissions());
+      const result = await getOnePermission(dispatch, token, userId);
+      console.log(result);
+      if (result) {
+        setTrigger(trigger + "s");
+        setChecked({
+          adminUser: [
+            result.view_users == 1 ? true : false,
+            result.update_users == 1 ? true : false,
+            result.create_users == 1 ? true : false,
+            result.delete_users == 1 ? true : false,
+          ],
+          event: [
+            result.view_events == 1 ? true : false,
+            result.update_events == 1 ? true : false,
+            result.create_events == 1 ? true : false,
+            result.delete_events == 1 ? true : false,
+          ],
+          advertisement: [
+            result.view_advertisement == 1 ? true : false,
+            result.update_advertisement == 1 ? true : false,
+            result.create_advertisement == 1 ? true : false,
+            result.delete_advertisement == 1 ? true : false,
+          ],
+          post: [
+            result.view_posts == 1 ? true : false,
+            result.update_posts == 1 ? true : false,
+            result.create_posts == 1 ? true : false,
+            result.delete_posts == 1 ? true : false,
+          ],
+        });
+        setLoading(false);
+        console.log("get permission");
+      } else {
+        console.log("no permission");
+      }
+    };
+    getPermissionsDataFromDB();
+  }, [dispatch, token, userId]);
 
   //   Admin User
   const handleChange1 = (event) => {
@@ -66,6 +105,7 @@ export const UserManagementImpl = () => {
   };
 
   const handleChange3 = (event) => {
+    console.log(checked);
     setChecked({
       ...checked,
       adminUser: [
@@ -176,6 +216,7 @@ export const UserManagementImpl = () => {
   };
 
   const handleChangeAdvertisement2 = (event) => {
+    console.log( event.target);
     setChecked({
       ...checked,
       advertisement: [
@@ -289,25 +330,25 @@ export const UserManagementImpl = () => {
       <FormControlLabel
         label="View"
         control={
-          <Checkbox checked={checked.adminUser[0]} onChange={handleChange2} />
+          <Checkbox checked={checked.adminUser[0]} value={checked.adminUser[0]} onChange={handleChange2} />
         }
       />
       <FormControlLabel
         label="Update"
         control={
-          <Checkbox checked={checked.adminUser[1]} onChange={handleChange3} />
+          <Checkbox checked={checked.adminUser[1]} value={checked.adminUser[1]} onChange={handleChange3} />
         }
       />
       <FormControlLabel
         label="Create"
         control={
-          <Checkbox checked={checked.adminUser[2]} onChange={handleChange4} />
+          <Checkbox checked={checked.adminUser[2]} value={checked.adminUser[2]} onChange={handleChange4} />
         }
       />
       <FormControlLabel
         label="Delete"
         control={
-          <Checkbox checked={checked.adminUser[3]} onChange={handleChange5} />
+          <Checkbox checked={checked.adminUser[3]} value={checked.adminUser[3]} onChange={handleChange5} />
         }
       />
     </Box>
@@ -318,25 +359,25 @@ export const UserManagementImpl = () => {
       <FormControlLabel
         label="View"
         control={
-          <Checkbox checked={checked.event[0]} onChange={handleChangeEvent2} />
+          <Checkbox checked={checked.event[0]} value={checked.event[0]} onChange={handleChangeEvent2} />
         }
       />
       <FormControlLabel
         label="Update"
         control={
-          <Checkbox checked={checked.event[1]} onChange={handleChangeEvent3} />
+          <Checkbox checked={checked.event[1]} value={checked.event[1]} onChange={handleChangeEvent3} />
         }
       />
       <FormControlLabel
         label="Create"
         control={
-          <Checkbox checked={checked.event[2]} onChange={handleChangeEvent4} />
+          <Checkbox checked={checked.event[2]} value={checked.event[2]} onChange={handleChangeEvent4} />
         }
       />
       <FormControlLabel
         label="Delete"
         control={
-          <Checkbox checked={checked.event[3]} onChange={handleChangeEvent5} />
+          <Checkbox checked={checked.event[3]} value={checked.event[3]} onChange={handleChangeEvent5} />
         }
       />
     </Box>
@@ -350,6 +391,7 @@ export const UserManagementImpl = () => {
           <Checkbox
             checked={checked.advertisement[0]}
             onChange={handleChangeAdvertisement2}
+            value={checked.advertisement[0]}
           />
         }
       />
@@ -359,6 +401,7 @@ export const UserManagementImpl = () => {
           <Checkbox
             checked={checked.advertisement[1]}
             onChange={handleChangeAdvertisement3}
+            value={checked.advertisement[1]}
           />
         }
       />
@@ -368,6 +411,7 @@ export const UserManagementImpl = () => {
           <Checkbox
             checked={checked.advertisement[2]}
             onChange={handleChangeAdvertisement4}
+            value={checked.advertisement[2]}
           />
         }
       />
@@ -377,6 +421,7 @@ export const UserManagementImpl = () => {
           <Checkbox
             checked={checked.advertisement[3]}
             onChange={handleChangeAdvertisement5}
+            value={checked.advertisement[3]}
           />
         }
       />
@@ -388,34 +433,36 @@ export const UserManagementImpl = () => {
       <FormControlLabel
         label="View"
         control={
-          <Checkbox checked={checked.post[0]} onChange={handleChangePost2} />
+          <Checkbox checked={checked.post[0]} value={checked.post[0]} onChange={handleChangePost2} />
         }
       />
       <FormControlLabel
         label="Update"
         control={
-          <Checkbox checked={checked.post[1]} onChange={handleChangePost3} />
+          <Checkbox checked={checked.post[1]} value={checked.post[1]} onChange={handleChangePost3} />
         }
       />
       <FormControlLabel
         label="Create"
         control={
-          <Checkbox checked={checked.post[2]} onChange={handleChangePost4} />
+          <Checkbox checked={checked.post[2]} value={checked.post[2]} onChange={handleChangePost4} />
         }
       />
       <FormControlLabel
         label="Delete"
         control={
-          <Checkbox checked={checked.post[3]} onChange={handleChangePost5} />
+          <Checkbox checked={checked.post[3]} value={checked.post[3]} onChange={handleChangePost5} />
         }
       />
     </Box>
   );
 
-  const handleClick = async (e) => {
+  const handleClick = (e) => {
     e.preventDefault();
 
     const data = new FormData(e.currentTarget);
+    data.get("description")
+    console.log(data);
 
     let formData = {
       user_id: userId,
@@ -440,12 +487,25 @@ export const UserManagementImpl = () => {
     };
     console.log(formData);
 
-    const resultUpdate = await updatePermission(formData,dispatch,token);
-    if(resultUpdate){
-        console.log("Set");
-    }else{
-        console.log("Unset");
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#378cbb",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const resultUpdate = await updatePermission(formData, dispatch, token);
+        if (resultUpdate) {
+          console.log("Set");
+          Swal.fire("Updated!", "User permission updated.", "success");
+        } else {
+          console.log("Unset");
+        }
+      }
+    });
   };
 
   return (
@@ -454,122 +514,132 @@ export const UserManagementImpl = () => {
         <Grid item xs={6}>
           <Typography variant="h3">User Permission</Typography>
         </Grid>
-        <Button variant="contained" href="/user" startIcon={<ArrowBackIcon />}>
+        <Button
+          variant="contained"
+          href="/userAdmin"
+          startIcon={<ArrowBackIcon />}
+        >
           Back
         </Button>
       </Grid>
-      <Box
-        sx={{
-          my: 1,
-          mx: 4,
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-        }}
-      >
+      {loading ? (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      ) : (
         <Box
-          component="form"
-          noValidate
-          onSubmit={handleClick}
-          className="productForm"
-          sx={{ m: 5 }}
+          sx={{
+            my: 1,
+            mx: 4,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
         >
-          {/* <div className="productFormLeft"> */}
-          <Grid container spacing={4}>
-            {/* <Grid item md={10}> */}
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleClick}
+            className="productForm"
+            sx={{ m: 5 }}
+          >
+            {/* <div className="productFormLeft"> */}
             <Grid container spacing={4}>
-              <Grid item md={sizeForm}>
-                <FormControlLabel
-                  label="Admin User"
-                  control={
-                    <Checkbox
-                      checked={
-                        checked.adminUser[0] &&
-                        checked.adminUser[1] &&
-                        checked.adminUser[2] &&
-                        checked.adminUser[3]
-                      }
-                      indeterminate={
-                        checked.adminUser[0] !== checked.adminUser[1]
-                      }
-                      onChange={handleChange1}
-                    />
-                  }
-                />
-                {childrenAdminUser}
-              </Grid>
-              <Grid item md={sizeForm}>
-                <FormControlLabel
-                  label="Events"
-                  control={
-                    <Checkbox
-                      checked={
-                        checked.event[0] &&
-                        checked.event[1] &&
-                        checked.event[2] &&
-                        checked.event[3]
-                      }
-                      indeterminate={checked.event[0] !== checked.event[1]}
-                      onChange={handleChangeEvent1}
-                    />
-                  }
-                />
-                {childrenEvents}
-              </Grid>
+              {/* <Grid item md={10}> */}
+              <Grid container spacing={4}>
+                <Grid item md={sizeForm}>
+                  <FormControlLabel
+                    label="Admin User"
+                    control={
+                      <Checkbox
+                        checked={
+                          checked.adminUser[0] &&
+                          checked.adminUser[1] &&
+                          checked.adminUser[2] &&
+                          checked.adminUser[3]
+                        }
+                        // indeterminate={
+                        //   checked.adminUser[0] !== checked.adminUser[1]
+                        // }
+                        onChange={handleChange1}
+                      />
+                    }
+                  />
+                  {childrenAdminUser}
+                </Grid>
+                <Grid item md={sizeForm}>
+                  <FormControlLabel
+                    label="Events"
+                    control={
+                      <Checkbox
+                        checked={
+                          checked.event[0] &&
+                          checked.event[1] &&
+                          checked.event[2] &&
+                          checked.event[3]
+                        }
+                        // indeterminate={checked.event[0] !== checked.event[1]}
+                        onChange={handleChangeEvent1}
+                      />
+                    }
+                  />
+                  {childrenEvents}
+                </Grid>
 
-              <Grid item md={sizeForm}>
-                <FormControlLabel
-                  label="Advertisement"
-                  control={
-                    <Checkbox
-                      checked={
-                        checked.advertisement[0] && checked.advertisement[1]
-                      }
-                      indeterminate={
-                        checked.advertisement[0] !== checked.advertisement[1]
-                      }
-                      onChange={handleChangeAdvertisement1}
-                    />
-                  }
-                />
-                {childrenAdvertisement}
-              </Grid>
-              <Grid item md={sizeForm}>
-                <FormControlLabel
-                  label="Post"
-                  control={
-                    <Checkbox
-                      checked={checked.post[0] && checked.post[1]}
-                      indeterminate={checked.post[0] !== checked.post[1]}
-                      onChange={handleChangePost1}
-                    />
-                  }
-                />
-                {childrenPost}
-              </Grid>
+                <Grid item md={sizeForm}>
+                  <FormControlLabel
+                    label="Advertisement"
+                    control={
+                      <Checkbox
+                        checked={
+                          checked.advertisement[0] && checked.advertisement[1] && checked.advertisement[2] && checked.advertisement[3]
+                        }
+                        // indeterminate={
+                        //   checked.advertisement[0] !== checked.advertisement[1]
+                        // }
+                        onChange={handleChangeAdvertisement1}
+                      />
+                    }
+                  />
+                  {childrenAdvertisement}
+                </Grid>
+                <Grid item md={sizeForm}>
+                  <FormControlLabel
+                    label="Post"
+                    control={
+                      <Checkbox
+                        checked={checked.post[0] && checked.post[1] && checked.post[2] && checked.post[3]}
+                        // indeterminate={checked.post[0] !== checked.post[1]}
+                        onChange={handleChangePost1}
+                      />
+                    }
+                  />
+                  {childrenPost}
+                </Grid>
 
-              <Grid item md={sizeForm}></Grid>
-              <Grid
-                item
-                md={12}
-                container
-                sx={{ alignItems: "center", justifyContent: "center" }}
-              >
-                <Button
-                  type="submit"
-                  variant="contained"
-                  endIcon={<SendIcon />}
-                  size="large"
-                  color="blue"
+                <Grid item md={sizeForm}></Grid>
+                <Grid
+                  item
+                  md={12}
+                  container
+                  sx={{ alignItems: "center", justifyContent: "center" }}
                 >
-                  Submit
-                </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    endIcon={<SendIcon />}
+                    size="large"
+                    color="blue"
+                  >
+                    Submit
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Grid>
   );
 };

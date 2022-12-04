@@ -19,6 +19,7 @@ import { removeAdminUsers } from "../../redux/userRedux";
 
 export const UserAdminListImpl = () => {
   const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const adminUsers = useSelector((state) => state.user.adminUsers);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
@@ -33,6 +34,7 @@ export const UserAdminListImpl = () => {
       const result = await getAdminUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
+        setTrigger(trigger+"s");
         setLoading(false);
       } else {
         console.log("Get user data unsuccess");
@@ -65,7 +67,7 @@ export const UserAdminListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, []);
+  }, [trigger]);
 
   const deleteItem = (id) => {
     Swal.fire({

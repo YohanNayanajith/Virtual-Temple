@@ -86,7 +86,7 @@ export const PostUpdateImpl = () => {
     const formNewData = {
       // user_id: currentUser.user_id,
       description: formData.get("description")
-        ? formData.get("first_name")
+        ? formData.get("description")
         : currentUser.description,
       
       // img: product.img,
@@ -147,7 +147,7 @@ export const PostUpdateImpl = () => {
       </div>
       <div className="productTop">
         <div className="productTopLeft">
-          <Charts data={pStats} dataKey1="Sales" title="User Registration" />
+          <Charts data={pStats} dataKey1="Sales" title="Post Registration" />
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">

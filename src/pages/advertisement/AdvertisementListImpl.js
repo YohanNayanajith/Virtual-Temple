@@ -19,6 +19,7 @@ import { removeAdvertisement } from "../../redux/advertisementRedux";
 
 export const AdvertisementListImpl = () => {
   const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const advertisements = useSelector(
     (state) => state.advertisement.advertisements
@@ -35,6 +36,7 @@ export const AdvertisementListImpl = () => {
       const result = await getAdvertisement(dispatch, token);
       if (result) {
         console.log("Get advertisement data success");
+        setTrigger(trigger+"s");
         setLoading(false);
       } else {
         console.log("Get advertisement data unsuccess");
@@ -61,7 +63,7 @@ export const AdvertisementListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, []);
+  }, [trigger,dispatch,advertisements]);
 
   const deleteItem = (id) => {
     Swal.fire({

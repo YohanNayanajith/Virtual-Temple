@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { logOutUser } from '../redux/userApiCalls';
+import { removePermissions } from '../redux/permissionRedux';
 
 export default function MainHeaderMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,6 +33,7 @@ export default function MainHeaderMenu() {
           }).then((result) => {
             if (result.isConfirmed) {
                 logOutUser(dispatch);
+                dispatch(removePermissions());
                 navigate('/');
             }
           })

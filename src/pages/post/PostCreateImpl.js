@@ -16,27 +16,33 @@ import { adminRegister, normalUserRegister } from "../../redux/userApiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addPost } from "../../redux/postApiCalls";
+import Select from "@mui/material/Select";
 
 const typeData = [
   {
-    value: "R001",
-    label: "Admin",
+    value: "url",
+    label: "Url",
   },
   {
-    value: "R002",
-    label: "Normal User",
+    value: "image",
+    label: "Image",
   },
 ];
 
 export const PostCreateImpl = () => {
   const [type, settype] = useState("");
+  const [selectValue, setSelectValue] = useState("");
+  const [dropdownValue1, setDropdownValue1] = useState(true);
+  const [dropdownValue2, setDropdownValue2] = useState(true);
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
   const [sizeForm, setSizeForm] = useState(6);
 
   const [descriptionError, setdescriptionError] = useState(false);
+  const [urlError, setUrlError] = useState(false);
 
   const [descriptionMessageError, setdescriptionMessageError] = useState("");
+  const [urlMessageError, setUrlMessageError] = useState("");
 
   const token = useSelector((state) => state.user.token);
   const userId = useSelector((state) => state.user.currentUser.user_id);
@@ -50,6 +56,7 @@ export const PostCreateImpl = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     console.log(inputs);
+    console.log(selectValue);
     const data = new FormData(e.currentTarget);
 
     let formData = {
@@ -59,7 +66,33 @@ export const PostCreateImpl = () => {
 
     if (!data.get("description")) {
       setdescriptionError(true);
-      setdescriptionMessageError("First Name can't be empty!");
+      setdescriptionMessageError("Description Name can't be empty!");
+    } else if (!(selectValue == "image")) {
+      console.log(data.get("url"));
+      let userData = {
+        ...formData,
+        posts: [data.get("url")],
+      };
+      console.log("Url select");
+      let status = callNormalUser(userData);
+      if (status) {
+        Swal.fire({
+          title: "Success!",
+          text: "User added success!",
+          icon: "success",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "#378cbb",
+          // showConfirmButton: false,
+          // timer: 2000,
+        });
+        navigate("/post");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "User added unsuccess!",
+        });
+      }
     } else {
       //image upload part
       const fileName = new Date().getTime() + file.name;
@@ -117,7 +150,7 @@ export const PostCreateImpl = () => {
                 // showConfirmButton: false,
                 // timer: 2000,
               });
-              navigate("/user");
+              navigate("/post");
               // e.target.description = "";
               // e.target.lastName = "";
               // e.target.email = "";
@@ -146,6 +179,17 @@ export const PostCreateImpl = () => {
   const callNormalUser = async (userData) => {
     const status = await addPost(userData, token);
     return status;
+  };
+
+  const handleChangeSelectValue = (event) => {
+    setSelectValue(event.target.value);
+    if (event.target.value == "image") {
+      setDropdownValue2(true);
+      setDropdownValue1(false);
+    } else {
+      setDropdownValue1(true);
+      setDropdownValue2(false);
+    }
   };
 
   return (
@@ -189,7 +233,7 @@ export const PostCreateImpl = () => {
                   required
                   fullWidth
                   id="description"
-                  label="First Name"
+                  label="Description"
                   name="description"
                   autoComplete="description"
                   autoFocus
@@ -204,11 +248,63 @@ export const PostCreateImpl = () => {
                 />
               </Grid>
 
+              <Grid item md={4}>
+                <TextField
+                  // error={categoryError}
+                  // defaultValue={currentUser.category}
+                  // variant="standard"
+                  margin="normal"
+                  select
+                  // required
+                  fullWidth
+                  id="category"
+                  label="Category"
+                  name="category"
+                  autoComplete="category"
+                  autoFocus
+                  // helperText={categoryMessageError}
+                  onChange={handleChangeSelectValue}
+                >
+                  {typeData.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
+              <Grid item md={sizeForm}>
+                <TextField
+                  error={urlError}
+                  // defaultValue={employeeNo}
+                  // variant="standard"
+                  // disabled
+                  disabled={dropdownValue2}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="url"
+                  label="Url"
+                  name="url"
+                  autoComplete="url"
+                  autoFocus
+                  helperText={urlMessageError}
+                  onClick={(e) => {
+                    setUrlError(false);
+                    setUrlMessageError("");
+                    setInputs((prev) => {
+                      return { ...prev, [e.target.name]: e.target.value };
+                    });
+                  }}
+                />
+              </Grid>
+
               <Grid item md={sizeForm}>
                 <TextField
                   // error={imageError}
                   // defaultValue={null}
                   // variant="standard"
+                  disabled={dropdownValue1}
                   type="file"
                   margin="normal"
                   required

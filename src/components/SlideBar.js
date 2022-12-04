@@ -1,5 +1,5 @@
 import { Avatar, Badge, Box, Chip, Collapse, createTheme, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ThemeProvider, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { SlideBarListItems } from './SlideBarListItems';
 
@@ -9,6 +9,8 @@ import StarBorder from '@mui/icons-material/StarBorder';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
+import { useDispatch, useSelector } from "react-redux";
+import { getOnePermission } from '../redux/permissionApiCalls';
 const drawerWidth = 340;
 
 
@@ -30,6 +32,27 @@ function SlideBar(props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [tabValue, setTabValue] = useState(props.value);
   const [open, setOpen] = useState(true);
+
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.user.currentUser.user_id);
+  const token = useSelector((state) => state.user.token);
+
+  const [checked, setChecked] = useState({
+    adminUser: [false, false, false, false],
+    event: [false, false, false, false],
+    advertisement: [false, false, false, false],
+    post: [false, false, false, false],
+  });
+
+  useEffect(() => {
+    const getPermissionDataFromOutside = async () => {
+      const result = await getOnePermission(dispatch, token, userId);
+      if(result){
+        setChecked(result);
+      }
+    }
+    getPermissionDataFromOutside();
+  }, [])
 
   const handleClick = () => {
     setOpen(!open);

@@ -20,6 +20,7 @@ import { removePosts } from "../../redux/postRedux";
 
 export const PostListImpl = () => {
   const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const posts = useSelector((state) => state.post.posts);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
@@ -30,9 +31,11 @@ export const PostListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
+      dispatch(removePosts());
       const result = await getPost(dispatch, token);
       if (result) {
         console.log("Get post data success");
+        setTrigger(trigger+"s");
         setLoading(false);
       } else {
         console.log("Get post data unsuccess");
@@ -43,7 +46,6 @@ export const PostListImpl = () => {
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
-      dispatch(removePosts());
       let rowData = [];
       posts.map(
         (item) => {
@@ -63,7 +65,7 @@ export const PostListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, []);
+  }, [trigger,dispatch]);
 
   const deleteItem = (id) => {
     Swal.fire({

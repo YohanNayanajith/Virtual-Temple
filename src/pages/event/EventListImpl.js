@@ -19,6 +19,7 @@ import { removeEvents } from "../../redux/eventRedux";
 
 export const EventListImpl = () => {
   const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const events = useSelector((state) => state.event.events);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
@@ -33,6 +34,7 @@ export const EventListImpl = () => {
       const result = await getEvent(dispatch, token);
       if (result) {
         console.log("Get user data success");
+        setTrigger(trigger+"s");
         setLoading(false);
       } else {
         console.log("Get user data unsuccess");
@@ -66,7 +68,7 @@ export const EventListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, []);
+  }, [trigger,dispatch,events]);
 
   const deleteItem = (id) => {
     Swal.fire({

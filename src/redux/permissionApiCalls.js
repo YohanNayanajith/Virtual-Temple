@@ -38,8 +38,10 @@ export const getOnePermission = async (dispatch, token, id) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      // console.log(res.data);
       dispatch(getPermissionSuccess(res.data.data));
-      return 1;
+      // return JSON.parse(res.data.data);
+      return res.data.data;
     } catch (err) {
       dispatch(getPermissionFailure());
       return 0;
@@ -78,7 +80,7 @@ export const updatePermission = async (Permission, dispatch, token) => {
 export const addPermission = async (Permission, token) => {
   // dispatch(addPermissionStart());
   try {
-    const res = await publicRequest.post(`/permission/create-Permission`, Permission, {
+    const res = await publicRequest.post(`/permission/add-permission`, Permission, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

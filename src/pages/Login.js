@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../redux/userApiCalls";
 import Swal from "sweetalert2";
+import { addPermission } from "../redux/permissionApiCalls";
 
 function Copyright(props) {
   return (
@@ -41,8 +42,17 @@ export default function Login() {
   const navigate = useNavigate();
   // const user = useSelector((state) => state.user.currentUser);
   // let userError = useSelector((state) => state.user.error);
-  // let userType = useSelector((state) => state.user.userType);
+  let token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
+
+  React.useEffect(()=>{
+    const checkUserExist = ()=>{
+      if(!(token == null)){
+        navigate("/dashboard");
+      }
+    }
+    checkUserExist();
+  },[]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

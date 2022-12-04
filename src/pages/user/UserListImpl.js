@@ -20,6 +20,7 @@ import { removeOtherUsers } from "../../redux/userRedux";
 
 export const UserListImpl = () => {
   const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const otherUsers = useSelector((state) => state.user.otherUsers);
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
@@ -30,9 +31,11 @@ export const UserListImpl = () => {
 
   React.useEffect(() => {
     const getDataFromDB = async () => {
+      dispatch(removeOtherUsers());
       const result = await getUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
+        setTrigger(trigger+"s");
         setLoading(false);
       } else {
         console.log("Get user data unsuccess");
@@ -43,7 +46,6 @@ export const UserListImpl = () => {
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
-      dispatch(removeOtherUsers());
       let rowData = [];
       otherUsers.map(
         (item) => {
@@ -67,7 +69,7 @@ export const UserListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, []);
+  }, [trigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -89,11 +91,6 @@ export const UserListImpl = () => {
   const updateItem = (id) => {
     console.log(id);
     navigate(`/updateUser/${id}`);
-  };
-
-  const updatePermission = (id) => {
-    console.log(id);
-    navigate(`/userManagement/${id}`);
   };
 
   const wishBirthday = (data) => {
@@ -213,14 +210,14 @@ export const UserListImpl = () => {
               >
                 <EditIcon />
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 aria-label="edit"
                 size="large"
                 color="success"
                 onClick={() => updatePermission(params.row.id)}
               >
                 <AdminPanelSettingsIcon />
-              </IconButton>
+              </IconButton> */}
               {/* <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
                 <DeleteIcon />
               </IconButton> */}

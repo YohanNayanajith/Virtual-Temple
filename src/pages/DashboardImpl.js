@@ -45,7 +45,6 @@ export const DashboardImpl = () => {
       { name: MONTHS[5], User: 74, Admin: 90 },
     ];
     setUserStats(data);
-    console.log(userStats);
 
     let featureData = [
       {

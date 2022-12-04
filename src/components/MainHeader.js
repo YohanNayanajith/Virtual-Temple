@@ -39,19 +39,25 @@ export default function MainHeader(props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const userToken = useSelector((state) => state.user.token);
   const user = useSelector((state) => state.user.currentUser);
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const checkUserExist = () => {
-      if (!user) {
-        navigate("/");
-      }
-    };
-    checkUserExist();
-  }, []);
+  // useEffect(() => {
+  //   const checkUserExist = () => {
+  //     if (!user) {
+  //       navigate("/login");
+  //     }
+  //   };
+  //   checkUserExist();
+  // }, []);
+  if(userToken === null){
+    // navigate("/");
+    window.location.href = "/";
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -77,10 +83,11 @@ export default function MainHeader(props) {
             >
               <MainTab value={tabValue} />
             </Box> */}
-            <IconButton onClick={() => navigate("/profile")}>
+            {/* <IconButton onClick={() => navigate("/profile")}> */}
+            <IconButton>
               <Avatar alt="Profile Picture" src={user.user_img} />
             </IconButton>
-            <NotificationMenu />
+            {/* <NotificationMenu /> */}
             <MainHeaderMenu />
           </Toolbar>
         </AppBar>

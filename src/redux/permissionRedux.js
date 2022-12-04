@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const permissionSlice = createSlice({
-  name: "permission",
+  name: "permissionData",
   initialState: {
-    permissions:null,
+    permissionsData:null,
     isFetching: false,
     error: false,
   },
@@ -15,14 +15,14 @@ const permissionSlice = createSlice({
     },
     getPermissionSuccess: (state, action) => {
       state.isFetching = false;
-      state.permissions = action.payload;
+      state.permissionsData = action.payload;
     },
     getPermissionFailure: (state) => {
       state.isFetching = false;
       state.error = true;
     },
     removePermissions: (state) => {
-      state.permissions = null;
+      state.permissionsData = null;
     },
     //DELETE
     deletePermissionStart: (state) => {
@@ -31,8 +31,8 @@ const permissionSlice = createSlice({
     },
     deletePermissionSuccess: (state, action) => {
       state.isFetching = false;
-      state.permissions.splice(
-        state.permissions.findIndex((item) => item.permission_id === action.payload),
+      state.permissionsData.splice(
+        state.permissionsData.findIndex((item) => item.permission_id === action.payload),
         1
       );
     },
@@ -48,8 +48,8 @@ const permissionSlice = createSlice({
     updatePermissionSuccess: (state, action) => {
       state.isFetching = false;
       state.otherPermissions[
-        state.permissions.findIndex((item) => item.permission_id === action.payload.id)
-      ] = action.payload.permissions;
+        state.permissionsData.findIndex((item) => item.permission_id === action.payload.id)
+      ] = action.payload.permissionsData;
     },
     updatePermissionFailure: (state) => {
       state.isFetching = false;
@@ -62,7 +62,7 @@ const permissionSlice = createSlice({
     },
     addPermissionSuccess: (state, action) => {
       state.isFetching = false;
-      state.Permissions.push(action.payload);
+      state.permissionsData.push(action.payload);
     },
     addPermissionFailure: (state) => {
       state.isFetching = false;

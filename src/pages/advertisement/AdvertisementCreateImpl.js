@@ -49,7 +49,7 @@ export const AdvertisementCreateImpl = () => {
 
     if (!data.get("description")) {                                         
       setdescriptionError(true);
-      setdescriptionMessageError("Url can't be empty!");
+      setdescriptionMessageError("Description can't be empty!");
     } else if(!data.get("url")) {
       setUrlError(true);
       setUrlMessageError("Url can't be empty!");
@@ -182,7 +182,7 @@ export const AdvertisementCreateImpl = () => {
                   required
                   fullWidth
                   id="description"
-                  label="First Name"
+                  label="Description"
                   name="description"
                   autoComplete="description"
                   autoFocus

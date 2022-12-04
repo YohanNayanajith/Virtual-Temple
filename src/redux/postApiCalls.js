@@ -67,7 +67,7 @@ export const updatePost = async (id, Post, dispatch, token) => {
 export const addPost = async (Post, token) => {
   // dispatch(addPostStart());
   try {
-    const res = await publicRequest.post(`/post/create-Post`, Post, {
+    const res = await publicRequest.post(`/post/createPost`, Post, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
