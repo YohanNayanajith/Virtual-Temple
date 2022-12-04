@@ -83,8 +83,8 @@ export default function MainHeader(props) {
             >
               <MainTab value={tabValue} />
             </Box> */}
-            {/* <IconButton onClick={() => navigate("/profile")}> */}
-            <IconButton>
+            <IconButton onClick={() => navigate("/profile")}>
+            {/* <IconButton> */}
               <Avatar alt="Profile Picture" src={user.user_img} />
             </IconButton>
             {/* <NotificationMenu /> */}

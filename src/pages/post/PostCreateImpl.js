@@ -248,7 +248,7 @@ export const PostCreateImpl = () => {
                 />
               </Grid>
 
-              <Grid item md={4}>
+              <Grid item md={sizeForm}>
                 <TextField
                   // error={categoryError}
                   // defaultValue={currentUser.category}
