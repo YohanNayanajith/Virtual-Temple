@@ -13,6 +13,7 @@ export const SlideBarListItems = () => {
       listName: "Dashboard",
       icon: <BookmarksIcon />,
       link: "/dashboard",
+      name:"dashboard"
     },
     {
       id: "leftbar-listItem-2",
@@ -20,6 +21,7 @@ export const SlideBarListItems = () => {
       link: "/user",
       icon: <BookmarksIcon />,
       hasExpand: false,
+      name:"view_users"
     },
     {
       id: "leftbar-listItem-3",
@@ -27,6 +29,7 @@ export const SlideBarListItems = () => {
       link: "/userAdmin",
       icon: <BookmarksIcon />,
       hasExpand: false,
+      name:"view_users"
     },
     {
       id: "leftbar-listItem-4",
@@ -34,6 +37,7 @@ export const SlideBarListItems = () => {
       icon: <BookmarksIcon />,
       hasExpand: false,
       link: "/event",
+      name:"view_events"
     },
     {
       id: "leftbar-listItem-5",
@@ -41,7 +45,7 @@ export const SlideBarListItems = () => {
       icon: <BookmarksIcon />,
       hasExpand: false,
       link: "/advertisement",
-      
+      name:"view_advertisement"
     },
     {
       id: "leftbar-listItem-6",
@@ -49,6 +53,7 @@ export const SlideBarListItems = () => {
       icon: <BookmarksIcon />,
       hasExpand: false,
       link: "/post",
+      name:"view_posts"
     },
   ];
 

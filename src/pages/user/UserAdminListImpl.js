@@ -22,6 +22,9 @@ export const UserAdminListImpl = () => {
   const [trigger, setTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const adminUsers = useSelector((state) => state.user.adminUsers);
+  const permissionsData = useSelector(
+    (state) => state.permissionData.permissionsData
+  );
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -34,7 +37,7 @@ export const UserAdminListImpl = () => {
       const result = await getAdminUsers(dispatch, token);
       if (result) {
         console.log("Get user data success");
-        setTrigger(trigger+"s");
+        setTrigger(trigger + "s");
         setLoading(false);
       } else {
         console.log("Get user data unsuccess");
@@ -176,14 +179,19 @@ export const UserAdminListImpl = () => {
           <>
             {/* params.row.isCancel */}
             <Stack direction="row" alignItems="center" spacing={1}>
-              <IconButton
-                aria-label="edit"
-                size="large"
-                color="success"
-                onClick={() => updateItem(params.row.id)}
-              >
-                <EditIcon />
-              </IconButton>
+              {permissionsData.update_users ? (
+                <IconButton
+                  aria-label="edit"
+                  size="large"
+                  color="success"
+                  onClick={() => updateItem(params.row.id)}
+                >
+                  <EditIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
+
               <IconButton
                 aria-label="edit"
                 size="large"
@@ -225,14 +233,18 @@ export const UserAdminListImpl = () => {
               <h2>Admin Users</h2>
             </div>
             <div>
-              <Button
-                variant="contained"
-                href="/createUser"
-                // color="secondary"
-                endIcon={<AddIcon />}
-              >
-                Create
-              </Button>
+              {permissionsData.create_users ? (
+                <Button
+                  variant="contained"
+                  href="/createUser"
+                  // color="secondary"
+                  endIcon={<AddIcon />}
+                >
+                  Create
+                </Button>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* <Button variant="contained">Contained1</Button> */}

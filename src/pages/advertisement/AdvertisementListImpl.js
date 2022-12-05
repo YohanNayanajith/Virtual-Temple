@@ -9,11 +9,10 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { TableComponent } from "../../components/TableComponent";
 import { useNavigate } from "react-router-dom";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
-import CelebrationIcon from "@mui/icons-material/Celebration";
-import { getEvent } from "../../redux/eventApiCalls";
-import { deleteAdvertisement, getAdvertisement } from "../../redux/advertisementApiCalls";
+import {
+  deleteAdvertisement,
+  getAdvertisement,
+} from "../../redux/advertisementApiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
 import { removeAdvertisement } from "../../redux/advertisementRedux";
 
@@ -24,6 +23,9 @@ export const AdvertisementListImpl = () => {
   const token = useSelector((state) => state.user.token);
   const advertisements = useSelector(
     (state) => state.advertisement.advertisements
+  );
+  const permissionsData = useSelector(
+    (state) => state.permissionData.permissionsData
   );
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
@@ -37,14 +39,14 @@ export const AdvertisementListImpl = () => {
       const result = await getAdvertisement(dispatch, token);
       if (result) {
         console.log("Get advertisement data success");
-        setTrigger(trigger+"s");
+        setTrigger(trigger + "s");
         setLoading(false);
       } else {
         console.log("Get advertisement data unsuccess");
       }
     };
     getDataFromDB();
-  }, [loading,deleteTrigger]);
+  }, [loading, deleteTrigger]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -64,7 +66,7 @@ export const AdvertisementListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, [trigger,dispatch,advertisements,deleteTrigger]);
+  }, [trigger, dispatch, advertisements, deleteTrigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -75,14 +77,18 @@ export const AdvertisementListImpl = () => {
       confirmButtonColor: "#378cbb",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const status = await deleteAdvertisement(id,dispatch,token);
-        if(status){
-          setDeleteTrigger(deleteTrigger+"z");
+        const status = await deleteAdvertisement(id, dispatch, token);
+        if (status) {
+          setDeleteTrigger(deleteTrigger + "z");
           Swal.fire("Deleted!", "Your event has been deleted.", "success");
-        }else{
-          Swal.fire("Can't Delete!", "Your event has not been deleted.", "error");
+        } else {
+          Swal.fire(
+            "Can't Delete!",
+            "Your event has not been deleted.",
+            "error"
+          );
         }
       }
     });
@@ -172,17 +178,31 @@ export const AdvertisementListImpl = () => {
           <>
             {/* params.row.isCancel */}
             <Stack direction="row" alignItems="center" spacing={1}>
-              <IconButton
-                aria-label="edit"
-                size="large"
-                color="success"
-                onClick={() => updateItem(params.row.id)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
-                <DeleteIcon />
-              </IconButton>
+              {permissionsData.update_advertisement ? (
+                <IconButton
+                  aria-label="edit"
+                  size="large"
+                  color="success"
+                  onClick={() => updateItem(params.row.id)}
+                >
+                  <EditIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
+
+              {permissionsData.delete_advertisement ? (
+                <IconButton
+                  aria-label="delete"
+                  size="large"
+                  color="error"
+                  onClick={() => deleteItem(params.row.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
             </Stack>
           </>
         );
@@ -213,14 +233,18 @@ export const AdvertisementListImpl = () => {
               <h2>Advertisements</h2>
             </div>
             <div>
-              <Button
-                variant="contained"
-                href="/createAdvertisement"
-                // color="secondary"
-                endIcon={<AddIcon />}
-              >
-                Create
-              </Button>
+              {permissionsData.create_advertisement ? (
+                <Button
+                  variant="contained"
+                  href="/createAdvertisement"
+                  // color="secondary"
+                  endIcon={<AddIcon />}
+                >
+                  Create
+                </Button>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* <Button variant="contained">Contained1</Button> */}

@@ -24,6 +24,9 @@ export const PostListImpl = () => {
   const [deleteTrigger, setDeleteTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const posts = useSelector((state) => state.post.posts);
+  const permissionsData = useSelector(
+    (state) => state.permissionData.permissionsData
+  );
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -36,14 +39,14 @@ export const PostListImpl = () => {
       const result = await getPost(dispatch, token);
       if (result) {
         console.log("Get post data success");
-        setTrigger(trigger+"s");
+        setTrigger(trigger + "s");
         setLoading(false);
       } else {
         console.log("Get post data unsuccess");
       }
     };
     getDataFromDB();
-  }, [loading,deleteTrigger]);
+  }, [loading, deleteTrigger]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -66,7 +69,7 @@ export const PostListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, [trigger,dispatch,deleteTrigger]);
+  }, [trigger, dispatch, deleteTrigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -77,14 +80,18 @@ export const PostListImpl = () => {
       confirmButtonColor: "#378cbb",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const status = await deletePost(id,dispatch,token);
-        if(status){
-          setDeleteTrigger(deleteTrigger+"z");
+        const status = await deletePost(id, dispatch, token);
+        if (status) {
+          setDeleteTrigger(deleteTrigger + "z");
           Swal.fire("Deleted!", "Your post has been deleted.", "success");
-        }else{
-          Swal.fire("Can't Delete!", "Your post has not been deleted.", "error");
+        } else {
+          Swal.fire(
+            "Can't Delete!",
+            "Your post has not been deleted.",
+            "error"
+          );
         }
       }
     });
@@ -174,17 +181,31 @@ export const PostListImpl = () => {
           <>
             {/* params.row.isCancel */}
             <Stack direction="row" alignItems="center" spacing={1}>
-              <IconButton
-                aria-label="edit"
-                size="large"
-                color="success"
-                onClick={() => updateItem(params.row.id)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
-                <DeleteIcon />
-              </IconButton>
+              {permissionsData.update_posts ? (
+                <IconButton
+                  aria-label="edit"
+                  size="large"
+                  color="success"
+                  onClick={() => updateItem(params.row.id)}
+                >
+                  <EditIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
+
+              {permissionsData.delete_posts ? (
+                <IconButton
+                  aria-label="delete"
+                  size="large"
+                  color="error"
+                  onClick={() => deleteItem(params.row.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
             </Stack>
           </>
         );
@@ -215,14 +236,18 @@ export const PostListImpl = () => {
               <h2>Posts</h2>
             </div>
             <div>
-              <Button
-                variant="contained"
-                href="/createPost"
-                // color="secondary"
-                endIcon={<AddIcon />}
-              >
-                Create
-              </Button>
+              {permissionsData.create_posts ? (
+                <Button
+                  variant="contained"
+                  href="/createPost"
+                  // color="secondary"
+                  endIcon={<AddIcon />}
+                >
+                  Create
+                </Button>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* <Button variant="contained">Contained1</Button> */}

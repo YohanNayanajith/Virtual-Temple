@@ -23,6 +23,9 @@ export const EventListImpl = () => {
   const [deleteTrigger, setDeleteTrigger] = useState("s");
   const token = useSelector((state) => state.user.token);
   const events = useSelector((state) => state.event.events);
+  const permissionsData = useSelector(
+    (state) => state.permissionData.permissionsData
+  );
   //   const [deleteTrigger, setDeleteTrigger] = React.useState("");
   const [rows, setRows] = React.useState([]);
 
@@ -35,14 +38,14 @@ export const EventListImpl = () => {
       const result = await getEvent(dispatch, token);
       if (result) {
         console.log("Get user data success");
-        setTrigger(trigger+"s");
+        setTrigger(trigger + "s");
         setLoading(false);
       } else {
         console.log("Get user data unsuccess");
       }
     };
     getDataFromDB();
-  }, [loading,deleteTrigger]);
+  }, [loading, deleteTrigger]);
 
   React.useEffect(() => {
     const getNormalUserData = async () => {
@@ -69,7 +72,7 @@ export const EventListImpl = () => {
       setRows(rowData);
     };
     getNormalUserData();
-  }, [trigger,dispatch,events,deleteTrigger]);
+  }, [trigger, dispatch, events, deleteTrigger]);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -80,17 +83,20 @@ export const EventListImpl = () => {
       confirmButtonColor: "#378cbb",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         // alert(id);
-        const status = await deleteEvent(id,dispatch,token);
-        if(status){
-          setDeleteTrigger(deleteTrigger+"z");
+        const status = await deleteEvent(id, dispatch, token);
+        if (status) {
+          setDeleteTrigger(deleteTrigger + "z");
           Swal.fire("Deleted!", "Your event has been deleted.", "success");
-        }else{
-          Swal.fire("Can't Delete!", "Your event has not been deleted.", "error");
+        } else {
+          Swal.fire(
+            "Can't Delete!",
+            "Your event has not been deleted.",
+            "error"
+          );
         }
-        
       }
     });
   };
@@ -185,17 +191,31 @@ export const EventListImpl = () => {
           <>
             {/* params.row.isCancel */}
             <Stack direction="row" alignItems="center" spacing={1}>
-              <IconButton
-                aria-label="edit"
-                size="large"
-                color="success"
-                onClick={() => updateItem(params.row.id)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton aria-label="delete" size="large" color="error" onClick={() => deleteItem(params.row.id)}>
-                <DeleteIcon />
-              </IconButton>
+              {permissionsData.update_events ? (
+                <IconButton
+                  aria-label="edit"
+                  size="large"
+                  color="success"
+                  onClick={() => updateItem(params.row.id)}
+                >
+                  <EditIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
+
+              {permissionsData.delete_events ? (
+                <IconButton
+                  aria-label="delete"
+                  size="large"
+                  color="error"
+                  onClick={() => deleteItem(params.row.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              ) : (
+                <></>
+              )}
             </Stack>
           </>
         );
@@ -226,14 +246,18 @@ export const EventListImpl = () => {
               <h2>Events</h2>
             </div>
             <div>
-              <Button
-                variant="contained"
-                href="/createEvent"
-                // color="secondary"
-                endIcon={<AddIcon />}
-              >
-                Create
-              </Button>
+              {permissionsData.create_events ? (
+                <Button
+                  variant="contained"
+                  href="/createEvent"
+                  // color="secondary"
+                  endIcon={<AddIcon />}
+                >
+                  Create
+                </Button>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* <Button variant="contained">Contained1</Button> */}
