@@ -505,6 +505,9 @@ export const UserCreateImpl = () => {
                   type="date"
                   autoFocus
                   helperText={birthdayMessageError}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   onChange={(e) => {
                     setBirthdayError(false);
                     setBirthdayMessageError("");
@@ -561,6 +564,9 @@ export const UserCreateImpl = () => {
                   name="file"
                   autoComplete="file"
                   autoFocus
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   // helperText={imageMessageError}
                   onChange={(e) => {
                     // setImageError(false);

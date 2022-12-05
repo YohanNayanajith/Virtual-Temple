@@ -314,6 +314,9 @@ export const EventCreateImpl = () => {
                   type="date"
                   autoFocus
                   helperText={event_dateMessageError}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   onChange={(e) => {
                     setevent_dateError(false);
                     setevent_dateMessageError("");
@@ -339,6 +342,9 @@ export const EventCreateImpl = () => {
                   type="time"
                   autoFocus
                   helperText={event_timeMessageError}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   onChange={(e) => {
                     setevent_timeError(false);
                     setevent_timeMessageError("");
@@ -362,6 +368,9 @@ export const EventCreateImpl = () => {
                   name="file"
                   autoComplete="file"
                   autoFocus
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   // helperText={imageMessageError}
                   onChange={(e) => {
                     // setImageError(false);

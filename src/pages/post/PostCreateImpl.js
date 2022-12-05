@@ -314,6 +314,9 @@ export const PostCreateImpl = () => {
                   name="file"
                   autoComplete="file"
                   autoFocus
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   // helperText={imageMessageError}
                   onChange={(e) => {
                     // setImageError(false);

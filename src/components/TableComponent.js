@@ -23,9 +23,9 @@ export const TableComponent = ({ rows, columns }) => {
       disableSelectionOnClick
       checkboxSelection
       autoHeight
-      // components={{
-      //   Toolbar: CustomToolbar,
-      // }}
+      components={{
+        Toolbar: CustomToolbar,
+      }}
       getRowId={(rows) => rows.id}
       pageSize={7}
       componentsProps={{
